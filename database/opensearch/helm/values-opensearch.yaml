@@ -458,11 +458,11 @@ fsGroup: ""
 ## the system has already been preconfigured. (Ex: https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
 ## Also see: https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
 sysctl:
-  enabled: false
+  enabled: true  # false
 
 ## Set optimal sysctl's through privileged initContainer.
 sysctlInit:
-  enabled: false
+  enabled: true  # false
   # override image, which is busybox by default
   # image: busybox
   # override image tag, which is latest by default
