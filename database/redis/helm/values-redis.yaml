@@ -449,7 +449,7 @@ master:
       - ReadWriteOnce
     ## @param master.persistence.size Persistent Volume size
     ##
-    size: 1Ti  # 8Gi
+    size: 100Gi  # 8Gi
     ## @param master.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
@@ -866,7 +866,7 @@ replica:
       - ReadWriteOnce
     ## @param replica.persistence.size Persistent Volume size
     ##
-    size: 8Gi
+    size: 100Gi  # 8Gi
     ## @param replica.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
@@ -1160,7 +1160,7 @@ sentinel:
       - ReadWriteOnce
     ## @param sentinel.persistence.size Persistent Volume size
     ##
-    size: 100Mi
+    size: 1Gi  # 100Mi
     ## @param sentinel.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
