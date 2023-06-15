@@ -5,6 +5,8 @@ See: https://github.com/opensearch-project/helm-charts
 
 ## Pre-requisite
 
+See: https://learn.microsoft.com/en-us/azure/aks/azure-blob-csi?tabs=Blobfuse#before-you-begin
+
 * Use `Blob`
 
 ```bash
