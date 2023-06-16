@@ -62,6 +62,7 @@ See: https://learn.microsoft.com/en-us/azure/aks/custom-node-configuration?tabs=
 #     --node-osdisk-size 128 \
 #     --node-osdisk-type Managed \
 #     --linux-os-config linuxosconfig.json
+
 az aks nodepool add \
     --no-wait \
     --cluster-name aks-data \
