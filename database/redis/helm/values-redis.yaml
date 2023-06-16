@@ -357,7 +357,7 @@ master:
   nodeSelector:
     kubernetes.io/os: linux
     nodetype: worker
-    spot: false
+    spot: "false"
   ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -778,7 +778,7 @@ replica:
   nodeSelector:
     kubernetes.io/os: linux
     nodetype: worker
-    spot: false
+    spot: "false"
   ## @param replica.tolerations Tolerations for Redis&reg; replicas pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
