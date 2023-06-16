@@ -206,8 +206,8 @@ updateStrategy:
 
 nodeSelector:
   kubernetes.io/os: linux
-  nodetype: "worker"
-  spot: "false"
+  nodetype: worker
+  spot: false
 
 tolerations: []
 
