@@ -74,10 +74,11 @@ config:
         allow_default_init_securityindex: true
         authcz:
           admin_dn:
-            - CN=kirk,OU=client,O=client,L=test,C=de
-            - C=US,ST=Arizona,L=Scottsdale,O="GoDaddy.com,\ Inc.",CN=Go\ Daddy\ Root\ Certificate\ Authority\ -\ G2
-            - C=US,ST=Arizona,L=Scottsdale,O="GoDaddy.com,\ Inc.",OU=http://certs.godaddy.com/repository/,CN=Go\ Daddy\ Root\ Certificate\ Authority\ -\ G2
-            - C=US,ST=Arizona,L=Scottsdale,O="GoDaddy.com,\ Inc.",CN=*.quickdrawai.net
+            # - CN=kirk,OU=client,O=client,L=test,C=de
+            # - C=US,ST=Arizona,L=Scottsdale,O="GoDaddy.com,\ Inc.",CN=Go\ Daddy\ Root\ Certificate\ Authority\ -\ G2
+            # - C=US,ST=Arizona,L=Scottsdale,O="GoDaddy.com,\ Inc.",OU=http://certs.godaddy.com/repository/,CN=Go\ Daddy\ Root\ Certificate\ Authority\ -\ G2
+            # - C=US,ST=Arizona,L=Scottsdale,O="GoDaddy.com,\ Inc.",CN=*.quickdrawai.net
+            - CN=*.quickdrawai.net
         audit.type: internal_opensearch
         enable_snapshot_restore_privilege: true
         check_snapshot_restore_write_privileges: true
