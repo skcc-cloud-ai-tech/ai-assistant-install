@@ -61,15 +61,15 @@ config:
       security:
         ssl:
           transport:
-            pemcert_filepath: ssl/esnode.pem
-            pemkey_filepath: ssl/esnode-key.pem
-            pemtrustedcas_filepath: ssl/root-ca.pem
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
             enforce_hostname_verification: false
           http:
             enabled: true
-            pemcert_filepath: ssl/esnode.pem
-            pemkey_filepath: ssl/esnode-key.pem
-            pemtrustedcas_filepath: ssl/root-ca.pem
+            pemcert_filepath: esnode.pem
+            pemkey_filepath: esnode-key.pem
+            pemtrustedcas_filepath: root-ca.pem
         allow_unsafe_democertificates: true
         allow_default_init_securityindex: true
         authcz:
@@ -120,10 +120,18 @@ envFrom: []
 # the X-Pack license
 # secretMounts: []
 secretMounts:
-  - name: az-domain-cert
+  - name: az-domain-cert-pem-cert
     secretName: az-domain-cert
-    path: /usr/share/opensearch/config/ssl
-    # path: /usr/share/dashboards/certs
+    path: /usr/share/opensearch/config/esnode.pem
+    subPath: esnode.pem
+  - name: az-domain-cert-pem-key
+    secretName: az-domain-cert
+    path: /usr/share/opensearch/config/esnode-key.pem
+    subPath: esnode-key.pem
+  - name: az-domain-cert-pem-cert
+    secretName: az-domain-cert
+    path: /usr/share/opensearch/config/root-ca.pem
+    subPath: root-ca.pem
 
 hostAliases: []
 # - ip: "127.0.0.1"
