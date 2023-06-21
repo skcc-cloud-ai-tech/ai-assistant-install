@@ -1,0 +1,45 @@
+kubectl apply -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vs-opensearch
+  namespace: opensearch
+spec:
+  hosts:
+  - '*.svc.cluster.local'
+  # - '*'
+  gateways:
+  - istio-system/istio-http-gateway
+  - mesh # applies to all the sidecars in the mesh
+  http:
+  - match:
+    # - headers:
+    #     cookie:
+    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    - uri:
+        prefix: /api/opensearch/engine/
+    - uri:
+        prefix: /api/opensearch/engine
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        port:
+          number: 9200
+        host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+  - match:
+    # - headers:
+    #     cookie:
+    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    - uri:
+        prefix: /api/opensearch/dashboard/
+    - uri:
+        prefix: /api/opensearch/dashboard
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        port:
+          number: 5601
+        host: opensearch-dashboards.opensearch.svc.cluster.local
+EOF

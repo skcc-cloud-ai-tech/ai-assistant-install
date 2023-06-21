@@ -1,0 +1,5 @@
+*.pem
+*.crt
+*.key
+*.pfx
+secret-certs.yaml

@@ -1,0 +1,92 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: istio-gateway
+  namespace: istio-system
+spec:
+  selector:
+    # app: istio-gateway
+    istio: gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+  - port:
+      number: 3306
+      name: mysql
+      protocol: TCP
+    hosts:
+    - "db.quickdrawai.net"
+  - port:
+      number: 9200
+      name: opensearch
+      protocol: TCP
+    hosts:
+    - "db.quickdrawai.net"
+  - port:
+      number: 5601
+      name: opensearch-dashboard
+      protocol: TCP
+    hosts:
+    - "db.quickdrawai.net"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vs-opensearch
+  namespace: opensearch
+spec:
+  hosts:
+  - 'db.quickdrawai.net'
+  gateways:
+  - istio-system/istio-gateway
+  - mesh # applies to all the sidecars in the mesh
+  tcp:
+  - match:
+    - port: 9200
+    route:
+    - destination:
+        host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+        port:
+          number: 9200
+  - match:
+    - port: 5601
+    route:
+    - destination:
+        host: opensearch-dashboards.opensearch.svc.cluster.local
+        port:
+          number: 5601
+  http:
+  - match:
+    # - headers:
+    #     cookie:
+    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    - uri:
+        prefix: /opensearch/engine/
+    - uri:
+        prefix: /opensearch/engine
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        port:
+          number: 9200
+        host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+  - match:
+    # - headers:
+    #     cookie:
+    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    - uri:
+        prefix: /opensearch/dashboard/
+    - uri:
+        prefix: /opensearch/dashboard
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        port:
+          number: 5601
+        host: opensearch-dashboards.opensearch.svc.cluster.local
