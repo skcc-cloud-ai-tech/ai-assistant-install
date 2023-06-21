@@ -128,7 +128,7 @@ secretMounts:
     secretName: az-domain-cert
     path: /usr/share/opensearch/config/esnode-key.pem
     subPath: esnode-key.pem
-  - name: az-domain-cert-pem-cert
+  - name: az-domain-cert-cacert
     secretName: az-domain-cert
     path: /usr/share/opensearch/config/root-ca.pem
     subPath: root-ca.pem
