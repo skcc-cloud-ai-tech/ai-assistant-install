@@ -130,15 +130,15 @@ envFrom: []
 secretMounts:
   - name: az-domain-cert-pem-cert
     secretName: az-domain-cert
-    path: /usr/share/opensearch/config/esnode.pem
+    path: /usr/share/opensearch/config/pemcert.pem
     subPath: esnode.pem
   - name: az-domain-cert-pem-key
     secretName: az-domain-cert
-    path: /usr/share/opensearch/config/esnode-key.pem
+    path: /usr/share/opensearch/config/pemkey.pem
     subPath: esnode-key.pem
   - name: az-domain-cert-cacert
     secretName: az-domain-cert
-    path: /usr/share/opensearch/config/root-ca.pem
+    path: /usr/share/opensearch/config/pemtrustedcas.pem
     subPath: root-ca.pem
 
 hostAliases: []
