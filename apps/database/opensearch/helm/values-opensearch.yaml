@@ -130,7 +130,8 @@ envFrom: []
 secretMounts:
   - name: az-domain-cert
     secretName: az-domain-cert
-    path: /usr/share/opensearch/config/ssl
+    path: /usr/share/opensearch/config/ssl-original
+    defaultMode: 0644
   
   # - name: az-domain-cert-pem-cert
   #   secretName: az-domain-cert
@@ -245,24 +246,60 @@ persistence:
   size: 1Ti  # 8Gi
   annotations: {}
 
-extraVolumes: []
-  # - name: extras
-  #   emptyDir: {}
+# extraVolumes: []
+#   # - name: extras
+#   #   emptyDir: {}
 
-extraVolumeMounts: []
-  # - name: extras
-  #   mountPath: /usr/share/extras
-  #   readOnly: true
+# extraVolumeMounts: []
+#   # - name: extras
+#   #   mountPath: /usr/share/extras
+#   #   readOnly: true
+extraVolumes:
+  # a place to store copied certs, filled by init container bash script, then mounted into opensearch container
+  - name: fixed-certs
+    emptyDir: {}
+
+  # volume from the tls secret, mounted into the init container only via its volumeMounts
+  - name: origin-certs
+    secret:
+      secretName: az-domain-cert
+
+
+extraVolumeMounts:
+  - name: fixed-certs
+    mountPath: /usr/share/opensearch/config/ssl
+    readOnly: true
+
 
 extraContainers: []
   # - name: do-something
   #   image: busybox
   #   command: ['do', 'something']
 
-extraInitContainers: []
-  # - name: do-somethings
-  #   image: busybox
-  #   command: ['do', 'something']
+# extraInitContainers: []
+#   # - name: do-somethings
+#   #   image: busybox
+#   #   command: ['do', 'something']
+extraInitContainers:
+  - name: fix-certs-permission
+    image: docker.io/bitnami/bitnami-shell:10-debian-10-r199
+    imagePullPolicy: "IfNotPresent"
+    command:
+      - /bin/bash
+      - -ec
+      - |
+        cp /certs/* /certs-fixed
+        chown -R 1000:1000 /certs-fixed
+
+    volumeMounts:
+      # tls cert source, from the secret volume
+      - name: origin-certs
+        mountPath: /certs
+      # the output volume - the mount path can be anything but needs to match bash script above
+      - name: fixed-certs
+        mountPath: /certs-fixed
+        
+
 
 # This is the PriorityClass settings as defined in
 # https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
