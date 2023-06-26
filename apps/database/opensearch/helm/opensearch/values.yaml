@@ -301,6 +301,7 @@ maxUnavailable: 1
 podSecurityContext:
   fsGroup: 1000
   runAsUser: 1000
+  allowPrivilegeEscalation: false
 
 securityContext:
   capabilities:
