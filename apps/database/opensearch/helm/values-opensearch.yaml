@@ -64,18 +64,18 @@ config:
             # pemcert_filepath: esnode.pem
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
-            pemcert_filepath: pemcert.pem
-            pemkey_filepath: pemkey.pem
-            pemtrustedcas_filepath: pemtrustedcas.pem
+            pemcert_filepath: ssl/pemcert.pem
+            pemkey_filepath: ssl/pemkey.pem
+            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
             enforce_hostname_verification: false
           http:
             enabled: true
             # pemcert_filepath: esnode.pem
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
-            pemcert_filepath: pemcert.pem
-            pemkey_filepath: pemkey.pem
-            pemtrustedcas_filepath: pemtrustedcas.pem
+            pemcert_filepath: ssl/pemcert.pem
+            pemkey_filepath: ssl/pemkey.pem
+            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
             enforce_hostname_verification: false
         allow_unsafe_democertificates: false
         allow_default_init_securityindex: true
@@ -128,21 +128,25 @@ envFrom: []
 # the X-Pack license
 # secretMounts: []
 secretMounts:
-  - name: az-domain-cert-pem-cert
+  - name: az-domain-cert
     secretName: az-domain-cert
-    path: /usr/share/opensearch/config
-    subPath: pemcert.pem
-    # subPath: esnode.pem
-  - name: az-domain-cert-pem-key
-    secretName: az-domain-cert
-    path: /usr/share/opensearch/config
-    subPath: pemkey.pem
-    # subPath: esnode-key.pem
-  - name: az-domain-cert-cacert
-    secretName: az-domain-cert
-    path: /usr/share/opensearch/config
-    subPath: pemtrustedcas.pem
-    # subPath: root-ca.pem
+    path: /usr/share/opensearch/config/ssl
+  
+  # - name: az-domain-cert-pem-cert
+  #   secretName: az-domain-cert
+  #   path: /usr/share/opensearch/config
+  #   subPath: pemcert.pem
+  #   # subPath: esnode.pem
+  # - name: az-domain-cert-pem-key
+  #   secretName: az-domain-cert
+  #   path: /usr/share/opensearch/config
+  #   subPath: pemkey.pem
+  #   # subPath: esnode-key.pem
+  # - name: az-domain-cert-cacert
+  #   secretName: az-domain-cert
+  #   path: /usr/share/opensearch/config
+  #   subPath: pemtrustedcas.pem
+  #   # subPath: root-ca.pem
 
 hostAliases: []
 # - ip: "127.0.0.1"
