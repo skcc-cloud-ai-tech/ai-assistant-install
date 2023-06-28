@@ -290,6 +290,7 @@ extraInitContainers:
       - |
         cp /certs/* /certs-fixed
         chown -R 1000:1000 /certs-fixed
+        chmod -R 600 /certs-fixed &&
     securityContext:
       runAsUser: 0
 
