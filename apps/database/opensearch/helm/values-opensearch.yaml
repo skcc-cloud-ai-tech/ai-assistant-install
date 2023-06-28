@@ -294,6 +294,7 @@ extraInitContainers:
         chmod -R 600 /certs-fixed
     securityContext:
       runAsUser: 1000
+      runAsGroup: 1000
 
     volumeMounts:
       # tls cert source, from the secret volume
