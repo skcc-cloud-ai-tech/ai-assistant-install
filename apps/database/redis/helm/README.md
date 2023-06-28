@@ -29,3 +29,7 @@ helm upgrade --install redis \
   --create-namespace \
   -f values-redis.yaml
 ```
+
+```bash
+
+```
