@@ -269,6 +269,7 @@ extraVolumeMounts:
   - name: fixed-certs
     mountPath: /usr/share/opensearch/config/ssl
     readOnly: true
+    defaultMode: 600
 
 
 extraContainers: []
@@ -298,11 +299,11 @@ extraInitContainers:
       # tls cert source, from the secret volume
       - name: origin-certs
         mountPath: /certs
-        defaultMode: 600
+        # defaultMode: 600
       # the output volume - the mount path can be anything but needs to match bash script above
       - name: fixed-certs
         mountPath: /certs-fixed
-        defaultMode: 600
+        # defaultMode: 600
         
 
 
