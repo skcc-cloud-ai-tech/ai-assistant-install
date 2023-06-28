@@ -293,8 +293,9 @@ extraInitContainers:
         chown -R 1000:1000 /certs-fixed
         chmod -R 600 /certs-fixed
     securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
+    runAsUser: 0
+    # fsGroup: 1000
+    # runAsUser: 1000
       # runAsUser: 1000
       # runAsGroup: 1000
 
@@ -379,6 +380,7 @@ maxUnavailable: 1
 podSecurityContext:
   fsGroup: 1000
   runAsUser: 1000
+  runAsGroup: 1000
 
 securityContext:
   capabilities:
@@ -387,7 +389,8 @@ securityContext:
   # readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
-  allowPrivilegeEscalation: false
+  runAsGroup: 1000
+  # allowPrivilegeEscalation: false
 
 securityConfig:
   enabled: true
