@@ -64,18 +64,30 @@ config:
             # pemcert_filepath: esnode.pem
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
-            pemcert_filepath: ssl/pemcert.pem
-            pemkey_filepath: ssl/pemkey.pem
-            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            
+            pemcert_filepath: ssl-original/pemcert.pem
+            pemkey_filepath: ssl-original/pemkey.pem
+            pemtrustedcas_filepath: ssl-original/pemtrustedcas.pem
+            
+            # pemcert_filepath: ssl/pemcert.pem
+            # pemkey_filepath: ssl/pemkey.pem
+            # pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            
             enforce_hostname_verification: false
           http:
             enabled: true
             # pemcert_filepath: esnode.pem
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
-            pemcert_filepath: ssl/pemcert.pem
-            pemkey_filepath: ssl/pemkey.pem
-            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            
+            pemcert_filepath: ssl-original/pemcert.pem
+            pemkey_filepath: ssl-original/pemkey.pem
+            pemtrustedcas_filepath: ssl-original/pemtrustedcas.pem
+            
+            # pemcert_filepath: ssl/pemcert.pem
+            # pemkey_filepath: ssl/pemkey.pem
+            # pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            
             enforce_hostname_verification: false
         allow_unsafe_democertificates: false
         allow_default_init_securityindex: true
@@ -131,7 +143,7 @@ secretMounts:
   - name: az-domain-cert
     secretName: az-domain-cert
     path: /usr/share/opensearch/config/ssl-original
-    defaultMode: 0644
+    defaultMode: 600
   
   # - name: az-domain-cert-pem-cert
   #   secretName: az-domain-cert
@@ -293,7 +305,7 @@ extraInitContainers:
         chown -R 1000:1000 /certs-fixed
         chmod -R 600 /certs-fixed
     securityContext:
-    runAsUser: 0
+      runAsUser: 0
     # fsGroup: 1000
     # runAsUser: 1000
       # runAsUser: 1000
@@ -307,6 +319,7 @@ extraInitContainers:
       # the output volume - the mount path can be anything but needs to match bash script above
       - name: fixed-certs
         mountPath: /certs-fixed
+        readOnly: false
         # defaultMode: 600
         
 
