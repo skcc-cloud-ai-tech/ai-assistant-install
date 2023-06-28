@@ -144,17 +144,17 @@ secretMounts:
     secretName: az-domain-cert-pemcert
     path: /usr/share/opensearch/config/ssl/pemcert.pem
     subPath: pemcert.pem
-    # defaultMode: 600
+    defaultMode: 600
   - name: az-domain-cert-pemkey
     secretName: az-domain-cert-pemkey
     path: /usr/share/opensearch/config/ssl/pemkey.pem
     subPath: pemkey.pem
-    # defaultMode: 600
+    defaultMode: 600
   - name: az-domain-cert-pemtrustedcas
     secretName: az-domain-cert-pemtrustedcas
     path: /usr/share/opensearch/config/ssl/pemtrustedcas.pem
     subPath: pemtrustedcas.pem
-    # defaultMode: 600
+    defaultMode: 600
   
   # - name: az-domain-cert-pem-cert
   #   secretName: az-domain-cert
