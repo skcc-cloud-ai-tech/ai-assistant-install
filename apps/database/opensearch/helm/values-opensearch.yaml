@@ -65,13 +65,13 @@ config:
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
             
-            pemcert_filepath: ssl-original/pemcert.pem
-            pemkey_filepath: ssl-original/pemkey.pem
-            pemtrustedcas_filepath: ssl-original/pemtrustedcas.pem
+            # pemcert_filepath: ssl-original/pemcert.pem
+            # pemkey_filepath: ssl-original/pemkey.pem
+            # pemtrustedcas_filepath: ssl-original/pemtrustedcas.pem
             
-            # pemcert_filepath: ssl/pemcert.pem
-            # pemkey_filepath: ssl/pemkey.pem
-            # pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            pemcert_filepath: ssl/pemcert.pem
+            pemkey_filepath: ssl/pemkey.pem
+            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
             
             enforce_hostname_verification: false
           http:
@@ -80,13 +80,13 @@ config:
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
             
-            pemcert_filepath: ssl-original/pemcert.pem
-            pemkey_filepath: ssl-original/pemkey.pem
-            pemtrustedcas_filepath: ssl-original/pemtrustedcas.pem
+            # pemcert_filepath: ssl-original/pemcert.pem
+            # pemkey_filepath: ssl-original/pemkey.pem
+            # pemtrustedcas_filepath: ssl-original/pemtrustedcas.pem
             
-            # pemcert_filepath: ssl/pemcert.pem
-            # pemkey_filepath: ssl/pemkey.pem
-            # pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            pemcert_filepath: ssl/pemcert.pem
+            pemkey_filepath: ssl/pemkey.pem
+            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
             
             enforce_hostname_verification: false
         allow_unsafe_democertificates: false
