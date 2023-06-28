@@ -329,6 +329,10 @@ spec:
           #!/usr/bin/env bash
           set -euo pipefail
 
+          chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config && \
+            chmod -R 0700 {{ .Values.opensearchHome }}/config/opensearch.yml && \
+            chmod -R 0600 {{ .Values.opensearchHome }}/config/ssl
+
           {{- range $plugin := .Values.plugins.installList }}
           ./bin/opensearch-plugin install -b {{ $plugin }}
           {{- end }}
