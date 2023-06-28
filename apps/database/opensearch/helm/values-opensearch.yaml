@@ -280,7 +280,7 @@ extraVolumes:
 extraVolumeMounts:
   - name: fixed-certs
     mountPath: /usr/share/opensearch/config/ssl
-    readOnly: true
+    readOnly: false
     # defaultMode: 600
 
 
