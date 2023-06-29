@@ -141,7 +141,7 @@ config:
             # pemcert_filepath: pemcert.pem
             # pemkey_filepath: pemkey.pem
             # pemtrustedcas_filepath: pemtrustedcas.pem
-        roles_mang_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
+        roles_mapping_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
         allow_unsafe_democertificates: false  # Set true to avoid the error (Caused by: java.lang.RuntimeException: Demo certificates found)
         allow_default_init_securityindex: true
         authcz:
