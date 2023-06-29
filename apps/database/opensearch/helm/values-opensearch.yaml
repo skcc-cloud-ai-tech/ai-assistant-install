@@ -117,10 +117,10 @@ config:
             pemkey_filepath: esnode-key.pem
             pemtrustedcas_filepath: root-ca.pem
 
-            keystore_type: "PKCS12/PFX"
+            keystore_type: "PFX"
             keystore_filepath: keystore
             keystore_alias: keystore
-            truststore_type: "PKCS12/PFX"
+            truststore_type: "PFX"
             truststore_filepath: keystore
             truststore_alias: keystore
             # pemcert_filepath: pemcert.pem
@@ -132,10 +132,10 @@ config:
             pemcert_filepath: esnode.pem
             pemkey_filepath: esnode-key.pem
             pemtrustedcas_filepath: root-ca.pem
-            keystore_type: "PKCS12/PFX"
+            keystore_type: "PFX"
             keystore_filepath: keystore
             keystore_alias: keystore
-            truststore_type: "PKCS12/PFX"
+            truststore_type: "PFX"
             truststore_filepath: keystore
             truststore_alias: keystore
             # pemcert_filepath: pemcert.pem
