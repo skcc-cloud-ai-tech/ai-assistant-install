@@ -190,11 +190,11 @@ secretMounts:
     path: /usr/share/opensearch/config/pemtrustedcas.pem
     subPath: pemtrustedcas.pem
     defaultMode: 384
-  # - name: az-domain-cert-pfx
-  #   secretName: az-domain-cert-pfx
-  #   path: /usr/share/opensearch/config/pfx
-  #   subPath: pemtrustedcas.pem
-  #   defaultMode: 384
+  - name: az-domain-cert-pfx
+    secretName: az-domain-cert-pfx
+    path: /usr/share/opensearch/config/pfx
+    subPath: pemtrustedcas.pem
+    defaultMode: 384
     # defaultMode: 0600
   
   # - name: az-domain-cert-pem-cert
