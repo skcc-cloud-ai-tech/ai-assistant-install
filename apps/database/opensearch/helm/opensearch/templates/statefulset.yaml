@@ -332,13 +332,13 @@ spec:
           #chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config
           chown opensearch:opensearch {{ .Values.opensearchHome }}/config
 
-          # {{- if .Values.plugins.enabled }}
-          # {{- range $plugin := .Values.plugins.installList }}
-          # ./bin/opensearch-plugin install -b {{ $plugin }}
-          # {{- end }}
+          {{- if .Values.plugins.enabled }}
+          {{- range $plugin := .Values.plugins.installList }}
+          ./bin/opensearch-plugin install -b {{ $plugin }}
+          {{- end }}
+          {{- end }}
 
-          # bash opensearch-docker-entrypoint.sh
-          # {{- end }}
+          bash opensearch-docker-entrypoint.sh
 
       # {{- if .Values.plugins.enabled }}
       #   command:
