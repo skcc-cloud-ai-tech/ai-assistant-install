@@ -261,7 +261,7 @@ persistence:
   storageClass: "azureblob-fuse-premium"
   accessModes:
     - ReadWriteOnce
-  size: 1Ti  # 8Gi
+  size: 2Ti  # 8Gi
   annotations: {}
 
 # extraVolumes: []
