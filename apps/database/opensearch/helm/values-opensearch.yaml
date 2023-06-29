@@ -116,9 +116,12 @@ config:
 # Extra environment variables to append to this nodeGroup
 # This will be appended to the current 'env:' key. You can use any of the kubernetes env
 # syntax here
-extraEnvs: []
-#  - name: MY_ENVIRONMENT_VAR
-#    value: the_value_goes_here
+# extraEnvs: []
+# #  - name: MY_ENVIRONMENT_VAR
+# #    value: the_value_goes_here
+extraEnvs:
+  - name: DISABLE_INSTALL_DEMO_CONFIG
+    value: "true"
 
 # Allows you to load environment variables from kubernetes secret or config map
 envFrom: []
@@ -537,13 +540,13 @@ lifecycle: {}
   #         while [[ "$(curl -s -o /dev/null -w '%{http_code}\n' $ES_URL)" != "200" ]]; do sleep 1; done
   #         curl -XPUT "$ES_URL/_template/$TEMPLATE_NAME" -H 'Content-Type: application/json' -d'{"index_patterns":['\""$INDEX_PATTERN"\"'],"settings":{"number_of_shards":'$SHARD_COUNT',"number_of_replicas":'$REPLICA_COUNT'}}'
 
-keystore: []
+# keystore: []
 # # To add secrets to the keystore:
 # #  - secretName: opensearch-encryption-key
-# keystore:
-#   - secretName: az-domain-cert-pemtrustedcas
-#   - secretName: az-domain-cert-pemcert
-#   - secretName: az-domain-cert-pemkey
+keystore:
+  - secretName: az-domain-cert-pemtrustedcas
+  - secretName: az-domain-cert-pemcert
+  - secretName: az-domain-cert-pemkey
 
 
 networkPolicy:
