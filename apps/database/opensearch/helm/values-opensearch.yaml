@@ -109,49 +109,24 @@ config:
     # Implicitly done if ".singleNode" is set to "true".
     # discovery.type: single-node
 
-    # Start OpenSearch Security Demo Configuration
-    # WARNING: revise all the lines below before you go into production
     plugins:
       security:
         ssl:
           transport:
-            # pemcert_filepath: esnode.pem
-            # pemkey_filepath: esnode-key.pem
-            # pemtrustedcas_filepath: root-ca.pem
-            
-
             pemcert_filepath: pemcert.pem
             pemkey_filepath: pemkey.pem
             pemtrustedcas_filepath: pemtrustedcas.pem
-            
-            # pemcert_filepath: /usr/share/opensearch/config/pemcert.pem
-            # pemkey_filepath: /usr/share/opensearch/config/pemkey.pem
-            # pemtrustedcas_filepath: /usr/share/opensearch/config/pemtrustedcas.pem
-            
             enforce_hostname_verification: false
-
           http:
             enabled: true
-            # pemcert_filepath: esnode.pem
-            # pemkey_filepath: esnode-key.pem
-            # pemtrustedcas_filepath: root-ca.pem
-            
             pemcert_filepath: pemcert.pem
             pemkey_filepath: pemkey.pem
             pemtrustedcas_filepath: pemtrustedcas.pem
-
-            # pemcert_filepath: /usr/share/opensearch/config/pemcert.pem
-            # pemkey_filepath: /usr/share/opensearch/config/pemkey.pem
-            # pemtrustedcas_filepath: /usr/share/opensearch/config/pemtrustedcas.pem
-
         ppioles_mang_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
         allow_unsafe_democertificates: false  # Set true to avoid the error (Caused by: java.lang.RuntimeException: Demo certificates found)
         allow_default_init_securityindex: true
         authcz:
           admin_dn:
-            # - CN=kirk,OU=client,O=client,L=test,C=de
-            # - C=US,ST=Arizona,L=Scottsdale,O=GoDaddy.com\, Inc.",CN=Go Daddy Root Certificate Authority - G2
-            # - C=US,ST=Arizona,L=Scottsdale,O=GoDaddy.com\, Inc.,OU=http://certs.godaddy.com/repository/,CN=Go Daddy Root Certificate Authority - G2
             - C=US,ST=Arizona,L=Scottsdale,O=GoDaddy.com\, Inc.,CN=*.quickdrawai.net
             - CN=*.quickdrawai.net
         audit.type: internal_opensearch
@@ -174,7 +149,6 @@ config:
               ".opendistro-notebooks",
               ".opendistro-asynchronous-search-response*",
             ]
-    ######## End OpenSearch Security Demo Configuration ########
   # log4j2.properties:
 
 # Extra environment variables to append to this nodeGroup
@@ -216,11 +190,11 @@ secretMounts:
     path: /usr/share/opensearch/config/pemtrustedcas.pem
     subPath: pemtrustedcas.pem
     defaultMode: 384
-  # - name: az-domain-cert-pfx
-  #   secretName: az-domain-cert-pfx
-  #   path: /usr/share/opensearch/config/pfx
-  #   subPath: pemtrustedcas.pem
-  #   defaultMode: 384
+  - name: az-domain-cert-pfx
+    secretName: az-domain-cert-pfx
+    path: /usr/share/opensearch/config/pfx
+    subPath: pemtrustedcas.pem
+    defaultMode: 384
     # defaultMode: 0600
   
   # - name: az-domain-cert-pem-cert
