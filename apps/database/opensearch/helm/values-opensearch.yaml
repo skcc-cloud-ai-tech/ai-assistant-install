@@ -217,7 +217,8 @@ secretMounts:
     defaultMode: 384
   - name: az-domain-keystore
     secretName: az-domain-keystore
-    path: /usr/share/opensearch/config/keystore.pfx
+    # path: /usr/share/opensearch/config/keystore.pfx
+    path: /usr/share/opensearch/config/opensearch.keystore
     subPath: keystore.pfx
     defaultMode: 384
     # defaultMode: 0600
