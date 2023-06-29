@@ -159,7 +159,7 @@ spec:
       - name: config
         configMap:
           name: {{ template "opensearch.uname" . }}-config
-        # defaultMode: 0600
+        defaultMode: 384  # 0600
       {{- end }}
       {{- if and .Values.securityConfig.config.data .Values.securityConfig.config.securityConfigSecret }}
       {{ fail "Only one of .Values.securityConfig.config.data and .Values.securityConfig.config.securityConfigSecret may be defined. Please see the comment in values.yaml describing usage." }}
@@ -322,6 +322,26 @@ spec:
         securityContext:
 {{ toYaml .Values.securityContext | indent 10 }}
 
+        # command:
+        # - sh
+        # - -c
+        # - |
+        #   #!/usr/bin/env bash
+        #   set -euo pipefail
+
+        #   chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config && \
+        #       chmod -R 0700 {{ .Values.opensearchHome }}/config/opensearch.yml && \
+        #       chmod -R 0600 {{ .Values.opensearchHome }}/config/ssl
+
+        #   {{- if .Values.plugins.enabled }}
+        #   {{- range $plugin := .Values.plugins.installList }}
+        #   ./bin/opensearch-plugin install -b {{ $plugin }}
+        #   {{- end }}
+
+        #   bash opensearch-docker-entrypoint.sh
+        #   {{- end }}
+
+      {{- if .Values.plugins.enabled }}
         command:
         - sh
         - -c
@@ -329,32 +349,12 @@ spec:
           #!/usr/bin/env bash
           set -euo pipefail
 
-          chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config && \
-              chmod -R 0700 {{ .Values.opensearchHome }}/config/opensearch.yml && \
-              chmod -R 0600 {{ .Values.opensearchHome }}/config/ssl
-
-          {{- if .Values.plugins.enabled }}
           {{- range $plugin := .Values.plugins.installList }}
           ./bin/opensearch-plugin install -b {{ $plugin }}
           {{- end }}
 
           bash opensearch-docker-entrypoint.sh
-          {{- end }}
-
-      # {{- if .Values.plugins.enabled }}
-      #   command:
-      #   - sh
-      #   - -c
-      #   - |
-      #     #!/usr/bin/env bash
-      #     set -euo pipefail
-
-      #     {{- range $plugin := .Values.plugins.installList }}
-      #     ./bin/opensearch-plugin install -b {{ $plugin }}
-      #     {{- end }}
-
-      #     bash opensearch-docker-entrypoint.sh
-      # {{- end }}
+      {{- end }}
 
         image: "{{ template "opensearch.dockerRegistry" . }}{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"

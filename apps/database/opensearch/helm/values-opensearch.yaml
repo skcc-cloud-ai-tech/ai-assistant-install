@@ -65,9 +65,9 @@ config:
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
             
-            pemcert_filepath: ssl/pemcert.pem
-            pemkey_filepath: ssl/pemkey.pem
-            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            pemcert_filepath: pemcert.pem
+            pemkey_filepath: pemkey.pem
+            pemtrustedcas_filepath: pemtrustedcas.pem
             
             enforce_hostname_verification: false
           http:
@@ -76,9 +76,9 @@ config:
             # pemkey_filepath: esnode-key.pem
             # pemtrustedcas_filepath: root-ca.pem
             
-            pemcert_filepath: ssl/pemcert.pem
-            pemkey_filepath: ssl/pemkey.pem
-            pemtrustedcas_filepath: ssl/pemtrustedcas.pem
+            pemcert_filepath: pemcert.pem
+            pemkey_filepath: pemkey.pem
+            pemtrustedcas_filepath: pemtrustedcas.pem
             
             enforce_hostname_verification: false
         allow_unsafe_democertificates: false
@@ -134,18 +134,21 @@ envFrom: []
 secretMounts:
   - name: az-domain-cert-pemcert
     secretName: az-domain-cert-pemcert
-    path: /usr/share/opensearch/config/ssl/pemcert.pem
+    path: /usr/share/opensearch/config/pemcert.pem
     subPath: pemcert.pem
+    defaultMode: 384 # 448=700, 384=600, 420=644
     # defaultMode: 0600
   - name: az-domain-cert-pemkey
     secretName: az-domain-cert-pemkey
-    path: /usr/share/opensearch/config/ssl/pemkey.pem
+    path: /usr/share/opensearch/config/pemkey.pem
     subPath: pemkey.pem
+    defaultMode: 384
     # defaultMode: 0600
   - name: az-domain-cert-pemtrustedcas
     secretName: az-domain-cert-pemtrustedcas
-    path: /usr/share/opensearch/config/ssl/pemtrustedcas.pem
+    path: /usr/share/opensearch/config/pemtrustedcas.pem
     subPath: pemtrustedcas.pem
+    defaultMode: 384
     # defaultMode: 0600
   
   # - name: az-domain-cert-pem-cert
