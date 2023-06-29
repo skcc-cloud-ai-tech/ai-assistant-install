@@ -329,7 +329,8 @@ spec:
           #!/usr/bin/env bash
           set -euo pipefail
 
-          chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config
+          #chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config
+          chown opensearch:opensearch {{ .Values.opensearchHome }}/config
 
           {{- if .Values.plugins.enabled }}
           {{- range $plugin := .Values.plugins.installList }}
