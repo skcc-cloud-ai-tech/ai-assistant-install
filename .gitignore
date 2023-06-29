@@ -1,6 +1,6 @@
 *.pem
 *.crt
 *.key
-*.pfx
+# *.pfx
 secret-certs.yaml
 .DS_Store
