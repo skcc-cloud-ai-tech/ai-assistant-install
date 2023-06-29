@@ -80,7 +80,7 @@ config:
             pemkey_filepath: pemkey.pem
             pemtrustedcas_filepath: pemtrustedcas.pem
             
-            enforce_hostname_verification: false
+          enforce_hostname_verification: false
         allow_unsafe_democertificates: true  # Set true to avoid the error (Caused by: java.lang.RuntimeException: Demo certificates found)
         allow_default_init_securityindex: true
         authcz:
