@@ -120,6 +120,9 @@ config:
             keystore_type: "PKCS12/PFX"
             keystore_filepath: keystore
             keystore_alias: keystore
+            truststore_type: "PKCS12/PFX"
+            truststore_filepath: keystore
+            truststore_alias: keystore
             # pemcert_filepath: pemcert.pem
             # pemkey_filepath: pemkey.pem
             # pemtrustedcas_filepath: pemtrustedcas.pem
@@ -132,6 +135,9 @@ config:
             keystore_type: "PKCS12/PFX"
             keystore_filepath: keystore
             keystore_alias: keystore
+            truststore_type: "PKCS12/PFX"
+            truststore_filepath: keystore
+            truststore_alias: keystore
             # pemcert_filepath: pemcert.pem
             # pemkey_filepath: pemkey.pem
             # pemtrustedcas_filepath: pemtrustedcas.pem
