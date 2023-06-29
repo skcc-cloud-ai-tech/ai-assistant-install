@@ -330,7 +330,7 @@ spec:
           set -euo pipefail
 
           #chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config
-          chmod 0700 opensearch:opensearch {{ .Values.opensearchHome }}/config
+          chmod 0700 {{ .Values.opensearchHome }}/config
 
           {{- if .Values.plugins.enabled }}
           {{- range $plugin := .Values.plugins.installList }}
