@@ -159,7 +159,7 @@ spec:
       - name: config
         configMap:
           name: {{ template "opensearch.uname" . }}-config
-        defaultMode: 384  # 0600
+          defaultMode: 384  # 0600
       {{- end }}
       {{- if and .Values.securityConfig.config.data .Values.securityConfig.config.securityConfigSecret }}
       {{ fail "Only one of .Values.securityConfig.config.data and .Values.securityConfig.config.securityConfigSecret may be defined. Please see the comment in values.yaml describing usage." }}
