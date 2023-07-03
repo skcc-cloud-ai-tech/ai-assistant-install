@@ -43,3 +43,7 @@ helm upgrade --install opensearch-dashboards \
   --create-namespace \
   -f values-opensearch-dashboards.yaml
 ```
+
+```bash
+az aks update --enable-blob-driver -n aks-data-dev -g rg-quickdrawai
+```
