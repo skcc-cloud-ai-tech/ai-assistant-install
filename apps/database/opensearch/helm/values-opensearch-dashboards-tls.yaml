@@ -60,14 +60,14 @@ rbac:
 # A list of secrets and their paths to mount inside the pod
 # This is useful for mounting certificates for security and for mounting
 # the X-Pack license
-secretMounts: []
+# secretMounts: []
 # #  - name: certs
 # #    secretName: dashboard-certs
 # #    path: /usr/share/dashboards/certs
-# secretMounts:
-#  - name: az-domain-cert
-#    secretName: az-domain-cert
-#    path: /usr/share/dashboards/certs
+secretMounts:
+ - name: az-domain-cert
+   secretName: az-domain-cert
+   path: /usr/share/dashboards/certs
 
 
 podAnnotations: {}
