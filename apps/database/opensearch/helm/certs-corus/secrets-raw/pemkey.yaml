@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: az-domain-cert-pemkey
+    namespace: opensearch
+    labels:
+        app/group: ai-assistant
+type: Opaque
+stringData:
+    esnode-key.pem: |
+        Bag Attributes
+            Microsoft Local Key set: <No Values>
+            localKeyID: 01 00 00 00 
+            friendlyName: {97561CB4-3CE8-4E2D-8A2F-5A1249FEFE5E}
+            Microsoft CSP Name: Microsoft Enhanced RSA and AES Cryptographic Provider
+        Key Attributes
+            X509v3 Key Usage: 10 
+        -----BEGIN PRIVATE KEY-----
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDOdNqzs8/Ctn/K
+        nGQLXWHtYbR5pHz0zGKXijBxtGqcX1pdktjlCi6Gj2C2Z8ROC2q1uKgEDL6SmtPz
+        a5rJ2UzpKGJsJZELw9VLgcGMh72Ph7LovM6Dnxph/JGQa3a65o1iywZSaz2uD6RC
+        GupWY82QBOcv8y1BBhbq54mnoQ6B7CPH4UFXOeKHg+9TDBfLQ2YGC/Smr7CD882j
+        C/2WD1fwuy4jWHzK6YaEORfXSKGzd/2ZycZ3mg+X5hdX2SBwYhK2zBN9Ppr5W/b0
+        rVrCrjaSOrEMWiBovhLCLdhp29V57D6K8Oyq+sSsqi2ovJqw7LBOZsUArBpkc3nm
+        2HWr67XhAgMBAAECggEAPiNjk8Sh2nvtOIEbh2QizjyjAh2k0lUVs4CPFhn0IH5+
+        hz1kdIM8/5j1xdCzf73l7y3Vu+pODXf2JQSVAP2bLW3PObeQ0VauwtwZ8f8E6ccw
+        7OWuzmS7nxRSh4IgqR4tHbf3fiTy2omwqYjKURgWzar8Hi11yGVZznfDsaVC5Y0v
+        oqXuGDo/TnFv84AqjDJQ8IqWN/JeY3+w2uYw6xWjfwYKQda1r9PIkC/F4LepWK6s
+        ISOxtaE4AedoHeW92JUcwOUtXwhQa7qyvlQ/2dMaN+rLgE6V6y7E8+4OAv1Q4uOD
+        WFoyJtbb3uXvD9hGo7BB2zvCqN577h/FDYnysOe1NQKBgQDx2oOjcr/qDoTT4E/b
+        uebJwBUa9FgXtgVrMzU50fx1lFrv+aVxounlxXSvCJ6DloPf/+ZBjh1qGErcSkyU
+        0eBR9IgCk5Wdx//mBkGz/9Pp/w4IVXZxVkf5KiU97SS1YQ94dQTFTauPFnhqTFkY
+        q11fG9bBV1xEPHF3GisBkgTyBwKBgQDaiE7gZ68mPRqxvU7WsDuXa9QcNE0Aivy/
+        QEkHhdkLcSkUrB7L/wGpE+bJ2pJdwUYGbI6rAzle8iy+rSw/o5ugrQ9ba1hLzYB6
+        QEnntFFFpOcgxtoNCgQzBceBGcoQA5/c4/lv6eEAA8l4Asf0cLLEafJT1YcP/kyL
+        PO2dsvN+1wKBgBZWbVQaVBllD+WV0SplKCi4IfrkWIKQID3/c8oMV/nwItoJP7uY
+        JWxAaX+FF0bmDvYQZ47kdlkHN1rTTfFs1QAcyrcaNHZnM35mU4kxdrwk/4HLiu36
+        3xjnSJtInNxXw5sHi9JBUzgbBjIjLRN3OF+BbbtbuzzeLEio1RIHD4ffAoGBAMxC
+        xj84it0aFj52LR+8oCa7sgoe1K6iOvZklx5B/IqWXgiljS+uDpZENN8NvuuFQPe2
+        NnAgVlqp0Cr14LsnKMs5l3Yi0ugfkGw0dR/vSlvnc+YOGDhB2YT7bOv9+AGZ8a3d
+        JQR3PkjuQT08lDulr2KpiMjVeCX50v/+ljdl0fUHAoGBAOP+q9yrP2nuandVQb/N
+        MMGppNiVC9kSO9+qzwGjBEkSrYFxDxRQa/2rJe9PWzmWSuBBkNl/uoD1pKeL6a7X
+        c1iJ5loisFDt4ivydRqvx0RBQFIKEEruSvhOJlr+gQG7w2wNtCRP/TlUIHzNZpY0
+        5qjP2i0Io5cfXlMw0kbXb3fI
+        -----END PRIVATE KEY-----

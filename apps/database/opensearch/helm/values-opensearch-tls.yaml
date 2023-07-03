@@ -113,6 +113,7 @@ config:
       security:
         ssl:
           transport:
+            enabled: true
             pemcert_filepath: esnode.pem
             pemkey_filepath: esnode-key.pem
             pemtrustedcas_filepath: root-ca.pem
@@ -141,18 +142,25 @@ config:
             # pemcert_filepath: pemcert.pem
             # pemkey_filepath: pemkey.pem
             # pemtrustedcas_filepath: pemtrustedcas.pem
-        roles_mapping_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
+
+            # clientauth_mode: OPTIONAL  # NONE, REQUIRE
+        # roles_mapping_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
         allow_unsafe_democertificates: false  # Set true to avoid the error (Caused by: java.lang.RuntimeException: Demo certificates found)
         allow_default_init_securityindex: true
         authcz:
           admin_dn:
-            - C=US,ST=Arizona,L=Scottsdale,O=GoDaddy.com\, Inc.,CN=*.quickdrawai.net
-            - CN=*.quickdrawai.net
+            - CN='opensearch.dev.corus-ai.net'
+            - CN='data.dev.corus-ai.net'
+            - CN='db.corus-ai.net'
+        nodes_dn:
+          - 'CN=*.corus-ai.net'
+          - 'CN=opensearch-cluster*'
         audit.type: internal_opensearch
         enable_snapshot_restore_privilege: true
         check_snapshot_restore_write_privileges: true
         restapi:
           roles_enabled: ["all_access", "security_rest_api_access"]
+          # password_validation_regex: '(?=.*[A-Z])(?=.*[^a-zA-Z\d])(?=.*[0-9])(?=.*[a-z]).{8,}'
         system_indices:
           enabled: true
           indices:

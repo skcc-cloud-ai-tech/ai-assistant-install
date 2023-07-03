@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: az-domain-cert-pemcert
+    namespace: opensearch
+    labels:
+        app/group: ai-assistant
+type: Opaque
+stringData:
+    esnode.pem: |
+        Bag Attributes
+            localKeyID: 01 00 00 00 
+        subject=CN = *.corus-ai.net
+
+        issuer=C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", OU = http://certs.godaddy.com/repository/, CN = Go Daddy Secure Certificate Authority - G2
+
+        -----BEGIN CERTIFICATE-----
+        MIIGjTCCBXWgAwIBAgIIBtq0HkcY1j8wDQYJKoZIhvcNAQELBQAwgbQxCzAJBgNV
+        BAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQHEwpTY290dHNkYWxlMRow
+        GAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjEtMCsGA1UECxMkaHR0cDovL2NlcnRz
+        LmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMTMwMQYDVQQDEypHbyBEYWRkeSBTZWN1
+        cmUgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwHhcNMjMwNzAzMDc0NTM4WhcN
+        MjQwNzAzMDc0NTM4WjAZMRcwFQYDVQQDDA4qLmNvcnVzLWFpLm5ldDCCASIwDQYJ
+        KoZIhvcNAQEBBQADggEPADCCAQoCggEBAM502rOzz8K2f8qcZAtdYe1htHmkfPTM
+        YpeKMHG0apxfWl2S2OUKLoaPYLZnxE4LarW4qAQMvpKa0/NrmsnZTOkoYmwlkQvD
+        1UuBwYyHvY+Hsui8zoOfGmH8kZBrdrrmjWLLBlJrPa4PpEIa6lZjzZAE5y/zLUEG
+        FurniaehDoHsI8fhQVc54oeD71MMF8tDZgYL9KavsIPzzaML/ZYPV/C7LiNYfMrp
+        hoQ5F9dIobN3/ZnJxneaD5fmF1fZIHBiErbME30+mvlb9vStWsKuNpI6sQxaIGi+
+        EsIt2Gnb1XnsPorw7Kr6xKyqLai8mrDssE5mxQCsGmRzeebYdavrteECAwEAAaOC
+        AzswggM3MAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUF
+        BwMCMA4GA1UdDwEB/wQEAwIFoDA4BgNVHR8EMTAvMC2gK6AphidodHRwOi8vY3Js
+        LmdvZGFkZHkuY29tL2dkaWcyczEtNjU0My5jcmwwXQYDVR0gBFYwVDBIBgtghkgB
+        hv1tAQcXATA5MDcGCCsGAQUFBwIBFitodHRwOi8vY2VydGlmaWNhdGVzLmdvZGFk
+        ZHkuY29tL3JlcG9zaXRvcnkvMAgGBmeBDAECATB2BggrBgEFBQcBAQRqMGgwJAYI
+        KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmdvZGFkZHkuY29tLzBABggrBgEFBQcwAoY0
+        aHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5L2dkaWcy
+        LmNydDAfBgNVHSMEGDAWgBRAwr0njsw0gzCiM9f7bLPwtCyAzjAnBgNVHREEIDAe
+        gg4qLmNvcnVzLWFpLm5ldIIMY29ydXMtYWkubmV0MB0GA1UdDgQWBBSA4h89jJSk
+        0OcDJQmVgxHulp7y9zCCAXwGCisGAQQB1nkCBAIEggFsBIIBaAFmAHUA7s3QZNXb
+        Gs7FXLedtM0TojKHRny87N7DUUhZRnEftZsAAAGJGrbeGAAABAMARjBEAiAM3o/y
+        YMIn2D0ALw0UCx8UxLelJzFbE9bX8eNNzrZLngIgXhS0li+G4iG6y4yt9XRH14hc
+        G8BV+hMrrbRgKe5mfEwAdQBIsONr2qZHNA/lagL6nTDrHFIBy1bdLIHZu7+rOdiE
+        cwAAAYkatt71AAAEAwBGMEQCIA/L/aIwF9mEFor2Zp2DnR5GEAUBTjnv7XDKc2Hn
+        hSN9AiBSLYWGGs1f7TuxTDJu2E7cK+RUz009SxencMJ9HtNKGwB2ANq2v2s/tbYi
+        n5vCu1xr6HCRcWy7UYSFNL2kPTBI1/urAAABiRq232AAAAQDAEcwRQIgdMHhaAok
+        oRk2+xAf1gC63UKCW+rWRq/1hvt2tPi7GFECIQDtsXmqjdQrhaB/54W5slOC7k0q
+        Hcg+4Igyr83jCq1twjANBgkqhkiG9w0BAQsFAAOCAQEAHD0fYITAKBcuYowjxp5v
+        bglJUS6U3C/+Ik1DZXEolgIG5kBDJcc4cDHch6bKbpOCIpsb3qh8Osv6VAlxf17L
+        OglKmHF3oFVzIaO03Hxj6gzmbiTcparS63TiP3ASCQzYRWhuxRdFXdfqE5EZt6o1
+        CQegATJgghVZ3ppzhxhod7JqYKMOsgdtyGei707AtYkCOJiomwyB6MX8byxzJSxh
+        h5quShKDEaCH8X5E5mib0tfpQjlKtuAvaBNV6+PGBr6z86uz/xYbmlcGpAxR3zJY
+        RZj5mcsNC9QzhwL2V4HyZMKkLORh1XikAPiMBXzmxRhlXpMhlCVt7+P7VR6P9LS0
+        6w==
+        -----END CERTIFICATE-----
+
