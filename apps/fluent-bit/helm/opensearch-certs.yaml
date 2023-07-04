@@ -1,0 +1,157 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: opensearch-certs
+    namespace: logging
+    labels:
+        app/group: corus
+type: Opaque
+stringData:
+    root-ca.pem: |
+        Bag Attributes: <Empty Attributes>
+        subject=C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", CN = Go Daddy Root Certificate Authority - G2
+
+        issuer=C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", CN = Go Daddy Root Certificate Authority - G2
+
+        -----BEGIN CERTIFICATE-----
+        MIIDxTCCAq2gAwIBAgIBADANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UEBhMCVVMx
+        EDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoT
+        EUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290IENlcnRp
+        ZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTA5MDkwMTAwMDAwMFoXDTM3MTIzMTIz
+        NTk1OVowgYMxCzAJBgNVBAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQH
+        EwpTY290dHNkYWxlMRowGAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjExMC8GA1UE
+        AxMoR28gRGFkZHkgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMjCCASIw
+        DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL9xYgjx+lk09xvJGKP3gElY6SKD
+        E6bFIEMBO4Tx5oVJnyfq9oQbTqC023CYxzIBsQU+B07u9PpPL1kwIuerGVZr4oAH
+        /PMWdYA5UXvl+TW2dE6pjYIT5LY/qQOD+qK+ihVqf94Lw7YZFAXK6sOoBJQ7Rnwy
+        DfMAZiLIjWltNowRGLfTshxgtDj6AozO091GB94KPutdfMh8+7ArU6SSYmlRJQVh
+        GkSBjCypQ5Yj36w6gZoOKcUcqeldHraenjAKOc7xiID7S13MMuyFYkMlNAJWJwGR
+        tDtwKj9useiciAF9n9T521NtYJ2/LOdYq7hfRvzOxBsDPAnrSTFcaUaz4EcCAwEA
+        AaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYE
+        FDqahQcQZyi27/a9BUFuIMGU2g/eMA0GCSqGSIb3DQEBCwUAA4IBAQCZ21151fmX
+        WWcDYfF+OwYxdS2hII5PZYe096acvNjpL9DbWu7PdIxztDhC2gV7+AJ1uP2lsdeu
+        9tfeE8tTEH6KRtGX+rcuKxGrkLAngPnon1rpN5+r5N9ss4UXnT3ZJE95kTXWXwTr
+        gIOrmgIttRD02JDHBHNA7XIloKmf7J6raBKZV8aPEjoJpL1E/QYVN8Gb5DKj7Tjo
+        2GTzLH4U/ALqn83/B2gX2yKQOC16jdFU8WnjXzPKej17CuPKf1855eJ1usV2GDPO
+        LPAvTK33sefOT6jEm0pUBsV/fdUID+Ic/n4XuKxe9tQWskMJDE32p2u0mYRlynqI
+        4uJEvlz36hz1
+        -----END CERTIFICATE-----
+        Bag Attributes: <Empty Attributes>
+        subject=C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", OU = http://certs.godaddy.com/repository/, CN = Go Daddy Secure Certificate Authority - G2
+
+        issuer=C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", CN = Go Daddy Root Certificate Authority - G2
+
+        -----BEGIN CERTIFICATE-----
+        MIIE0DCCA7igAwIBAgIBBzANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UEBhMCVVMx
+        EDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoT
+        EUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290IENlcnRp
+        ZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTExMDUwMzA3MDAwMFoXDTMxMDUwMzA3
+        MDAwMFowgbQxCzAJBgNVBAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQH
+        EwpTY290dHNkYWxlMRowGAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjEtMCsGA1UE
+        CxMkaHR0cDovL2NlcnRzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMTMwMQYDVQQD
+        EypHbyBEYWRkeSBTZWN1cmUgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwggEi
+        MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC54MsQ1K92vdSTYuswZLiBCGzD
+        BNliF44v/z5lz4/OYuY8UhzaFkVLVat4a2ODYpDOD2lsmcgaFItMzEUz6ojcnqOv
+        K/6AYZ15V8TPLvQ/MDxdR/yaFrzDN5ZBUY4RS1T4KL7QjL7wMDge87Am+GZHY23e
+        cSZHjzhHU9FGHbTj3ADqRay9vHHZqm8A29vNMDp5T19MR/gd71vCxJ1gO7GyQ5HY
+        pDNO6rPWJ0+tJYqlxvTV0KaudAVkV4i1RFXULSo6Pvi4vekyCgKUZMQWOlDxSq7n
+        eTOvDCAHf+jfBDnCaQJsY1L6d8EbyHSHyLmTGFBUNUtpTrw700kuH9zB0lL7AgMB
+        AAGjggEaMIIBFjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIBBjAdBgNV
+        HQ4EFgQUQMK9J47MNIMwojPX+2yz8LQsgM4wHwYDVR0jBBgwFoAUOpqFBxBnKLbv
+        9r0FQW4gwZTaD94wNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhhodHRwOi8v
+        b2NzcC5nb2RhZGR5LmNvbS8wNQYDVR0fBC4wLDAqoCigJoYkaHR0cDovL2NybC5n
+        b2RhZGR5LmNvbS9nZHJvb3QtZzIuY3JsMEYGA1UdIAQ/MD0wOwYEVR0gADAzMDEG
+        CCsGAQUFBwIBFiVodHRwczovL2NlcnRzLmdvZGFkZHkuY29tL3JlcG9zaXRvcnkv
+        MA0GCSqGSIb3DQEBCwUAA4IBAQAIfmyTEMg4uJapkEv/oV9PBO9sPpyIBslQj6Zz
+        91cxG7685C/b+LrTW+C05+Z5Yg4MotdqY3MxtfWoSKQ7CC2iXZDXtHwlTxFWMMS2
+        RJ17LJ3lXubvDGGqv+QqG+6EnriDfcFDzkSnE3ANkR/0yBOtg2DZ2HKocyQetawi
+        DsoXiWJYRBuriSUBAA/NxBti21G00w9RKpv0vHP8ds42pM3Z2Czqrpv1KrKQ0U11
+        GIo/ikGQI31bS/6kA1ibRrLDYGCD+H1QQc7CoZDDu+8CL9IVVO5EFdkKrqeKM+2x
+        LXY2JtwE65/3YR8V3Idv7kaWKK2hJn0KCacuBKONvPi8BDAB
+        -----END CERTIFICATE-----
+
+
+    esnode.pem: |
+        Bag Attributes
+            localKeyID: 01 00 00 00 
+        subject=CN = *.corus-ai.net
+
+        issuer=C = US, ST = Arizona, L = Scottsdale, O = "GoDaddy.com, Inc.", OU = http://certs.godaddy.com/repository/, CN = Go Daddy Secure Certificate Authority - G2
+
+        -----BEGIN CERTIFICATE-----
+        MIIGjTCCBXWgAwIBAgIIBtq0HkcY1j8wDQYJKoZIhvcNAQELBQAwgbQxCzAJBgNV
+        BAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQHEwpTY290dHNkYWxlMRow
+        GAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjEtMCsGA1UECxMkaHR0cDovL2NlcnRz
+        LmdvZGFkZHkuY29tL3JlcG9zaXRvcnkvMTMwMQYDVQQDEypHbyBEYWRkeSBTZWN1
+        cmUgQ2VydGlmaWNhdGUgQXV0aG9yaXR5IC0gRzIwHhcNMjMwNzAzMDc0NTM4WhcN
+        MjQwNzAzMDc0NTM4WjAZMRcwFQYDVQQDDA4qLmNvcnVzLWFpLm5ldDCCASIwDQYJ
+        KoZIhvcNAQEBBQADggEPADCCAQoCggEBAM502rOzz8K2f8qcZAtdYe1htHmkfPTM
+        YpeKMHG0apxfWl2S2OUKLoaPYLZnxE4LarW4qAQMvpKa0/NrmsnZTOkoYmwlkQvD
+        1UuBwYyHvY+Hsui8zoOfGmH8kZBrdrrmjWLLBlJrPa4PpEIa6lZjzZAE5y/zLUEG
+        FurniaehDoHsI8fhQVc54oeD71MMF8tDZgYL9KavsIPzzaML/ZYPV/C7LiNYfMrp
+        hoQ5F9dIobN3/ZnJxneaD5fmF1fZIHBiErbME30+mvlb9vStWsKuNpI6sQxaIGi+
+        EsIt2Gnb1XnsPorw7Kr6xKyqLai8mrDssE5mxQCsGmRzeebYdavrteECAwEAAaOC
+        AzswggM3MAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUF
+        BwMCMA4GA1UdDwEB/wQEAwIFoDA4BgNVHR8EMTAvMC2gK6AphidodHRwOi8vY3Js
+        LmdvZGFkZHkuY29tL2dkaWcyczEtNjU0My5jcmwwXQYDVR0gBFYwVDBIBgtghkgB
+        hv1tAQcXATA5MDcGCCsGAQUFBwIBFitodHRwOi8vY2VydGlmaWNhdGVzLmdvZGFk
+        ZHkuY29tL3JlcG9zaXRvcnkvMAgGBmeBDAECATB2BggrBgEFBQcBAQRqMGgwJAYI
+        KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmdvZGFkZHkuY29tLzBABggrBgEFBQcwAoY0
+        aHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNvbS9yZXBvc2l0b3J5L2dkaWcy
+        LmNydDAfBgNVHSMEGDAWgBRAwr0njsw0gzCiM9f7bLPwtCyAzjAnBgNVHREEIDAe
+        gg4qLmNvcnVzLWFpLm5ldIIMY29ydXMtYWkubmV0MB0GA1UdDgQWBBSA4h89jJSk
+        0OcDJQmVgxHulp7y9zCCAXwGCisGAQQB1nkCBAIEggFsBIIBaAFmAHUA7s3QZNXb
+        Gs7FXLedtM0TojKHRny87N7DUUhZRnEftZsAAAGJGrbeGAAABAMARjBEAiAM3o/y
+        YMIn2D0ALw0UCx8UxLelJzFbE9bX8eNNzrZLngIgXhS0li+G4iG6y4yt9XRH14hc
+        G8BV+hMrrbRgKe5mfEwAdQBIsONr2qZHNA/lagL6nTDrHFIBy1bdLIHZu7+rOdiE
+        cwAAAYkatt71AAAEAwBGMEQCIA/L/aIwF9mEFor2Zp2DnR5GEAUBTjnv7XDKc2Hn
+        hSN9AiBSLYWGGs1f7TuxTDJu2E7cK+RUz009SxencMJ9HtNKGwB2ANq2v2s/tbYi
+        n5vCu1xr6HCRcWy7UYSFNL2kPTBI1/urAAABiRq232AAAAQDAEcwRQIgdMHhaAok
+        oRk2+xAf1gC63UKCW+rWRq/1hvt2tPi7GFECIQDtsXmqjdQrhaB/54W5slOC7k0q
+        Hcg+4Igyr83jCq1twjANBgkqhkiG9w0BAQsFAAOCAQEAHD0fYITAKBcuYowjxp5v
+        bglJUS6U3C/+Ik1DZXEolgIG5kBDJcc4cDHch6bKbpOCIpsb3qh8Osv6VAlxf17L
+        OglKmHF3oFVzIaO03Hxj6gzmbiTcparS63TiP3ASCQzYRWhuxRdFXdfqE5EZt6o1
+        CQegATJgghVZ3ppzhxhod7JqYKMOsgdtyGei707AtYkCOJiomwyB6MX8byxzJSxh
+        h5quShKDEaCH8X5E5mib0tfpQjlKtuAvaBNV6+PGBr6z86uz/xYbmlcGpAxR3zJY
+        RZj5mcsNC9QzhwL2V4HyZMKkLORh1XikAPiMBXzmxRhlXpMhlCVt7+P7VR6P9LS0
+        6w==
+        -----END CERTIFICATE-----
+
+
+
+    esnode-key.pem: |
+        Bag Attributes
+            Microsoft Local Key set: <No Values>
+            localKeyID: 01 00 00 00 
+            friendlyName: {97561CB4-3CE8-4E2D-8A2F-5A1249FEFE5E}
+            Microsoft CSP Name: Microsoft Enhanced RSA and AES Cryptographic Provider
+        Key Attributes
+            X509v3 Key Usage: 10 
+        -----BEGIN PRIVATE KEY-----
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDOdNqzs8/Ctn/K
+        nGQLXWHtYbR5pHz0zGKXijBxtGqcX1pdktjlCi6Gj2C2Z8ROC2q1uKgEDL6SmtPz
+        a5rJ2UzpKGJsJZELw9VLgcGMh72Ph7LovM6Dnxph/JGQa3a65o1iywZSaz2uD6RC
+        GupWY82QBOcv8y1BBhbq54mnoQ6B7CPH4UFXOeKHg+9TDBfLQ2YGC/Smr7CD882j
+        C/2WD1fwuy4jWHzK6YaEORfXSKGzd/2ZycZ3mg+X5hdX2SBwYhK2zBN9Ppr5W/b0
+        rVrCrjaSOrEMWiBovhLCLdhp29V57D6K8Oyq+sSsqi2ovJqw7LBOZsUArBpkc3nm
+        2HWr67XhAgMBAAECggEAPiNjk8Sh2nvtOIEbh2QizjyjAh2k0lUVs4CPFhn0IH5+
+        hz1kdIM8/5j1xdCzf73l7y3Vu+pODXf2JQSVAP2bLW3PObeQ0VauwtwZ8f8E6ccw
+        7OWuzmS7nxRSh4IgqR4tHbf3fiTy2omwqYjKURgWzar8Hi11yGVZznfDsaVC5Y0v
+        oqXuGDo/TnFv84AqjDJQ8IqWN/JeY3+w2uYw6xWjfwYKQda1r9PIkC/F4LepWK6s
+        ISOxtaE4AedoHeW92JUcwOUtXwhQa7qyvlQ/2dMaN+rLgE6V6y7E8+4OAv1Q4uOD
+        WFoyJtbb3uXvD9hGo7BB2zvCqN577h/FDYnysOe1NQKBgQDx2oOjcr/qDoTT4E/b
+        uebJwBUa9FgXtgVrMzU50fx1lFrv+aVxounlxXSvCJ6DloPf/+ZBjh1qGErcSkyU
+        0eBR9IgCk5Wdx//mBkGz/9Pp/w4IVXZxVkf5KiU97SS1YQ94dQTFTauPFnhqTFkY
+        q11fG9bBV1xEPHF3GisBkgTyBwKBgQDaiE7gZ68mPRqxvU7WsDuXa9QcNE0Aivy/
+        QEkHhdkLcSkUrB7L/wGpE+bJ2pJdwUYGbI6rAzle8iy+rSw/o5ugrQ9ba1hLzYB6
+        QEnntFFFpOcgxtoNCgQzBceBGcoQA5/c4/lv6eEAA8l4Asf0cLLEafJT1YcP/kyL
+        PO2dsvN+1wKBgBZWbVQaVBllD+WV0SplKCi4IfrkWIKQID3/c8oMV/nwItoJP7uY
+        JWxAaX+FF0bmDvYQZ47kdlkHN1rTTfFs1QAcyrcaNHZnM35mU4kxdrwk/4HLiu36
+        3xjnSJtInNxXw5sHi9JBUzgbBjIjLRN3OF+BbbtbuzzeLEio1RIHD4ffAoGBAMxC
+        xj84it0aFj52LR+8oCa7sgoe1K6iOvZklx5B/IqWXgiljS+uDpZENN8NvuuFQPe2
+        NnAgVlqp0Cr14LsnKMs5l3Yi0ugfkGw0dR/vSlvnc+YOGDhB2YT7bOv9+AGZ8a3d
+        JQR3PkjuQT08lDulr2KpiMjVeCX50v/+ljdl0fUHAoGBAOP+q9yrP2nuandVQb/N
+        MMGppNiVC9kSO9+qzwGjBEkSrYFxDxRQa/2rJe9PWzmWSuBBkNl/uoD1pKeL6a7X
+        c1iJ5loisFDt4ivydRqvx0RBQFIKEEruSvhOJlr+gQG7w2wNtCRP/TlUIHzNZpY0
+        5qjP2i0Io5cfXlMw0kbXb3fI
+        -----END PRIVATE KEY-----

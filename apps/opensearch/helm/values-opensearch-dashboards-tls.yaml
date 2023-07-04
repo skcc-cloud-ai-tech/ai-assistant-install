@@ -5,7 +5,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-opensearchHosts: "https://opensearch-cluster-master:9200"
+# opensearchHosts: "https://opensearch-cluster-master:9200"
+opensearchHosts: "https://opensearch.corus-ai.net:9200"
 replicaCount: 1
 
 image:
@@ -65,9 +66,32 @@ rbac:
 # #    secretName: dashboard-certs
 # #    path: /usr/share/dashboards/certs
 secretMounts:
- - name: az-domain-cert
-   secretName: az-domain-cert
-   path: /usr/share/dashboards/certs
+  - name: az-domain-cert
+    secretName: az-domain-cert
+    path: /usr/share/dashboards/certs
+  - name: az-domain-cert-pemcert
+    secretName: az-domain-cert-pemcert
+    path: /usr/share/opensearch-dashboards/certs/esnode.pem
+    subPath: esnode.pem
+    # path: /usr/share/opensearch/config/pemcert.pem
+    # subPath: pemcert.pem
+    defaultMode: 384 # 448=700, 384=600, 420=644
+    # defaultMode: 0600
+  - name: az-domain-cert-pemkey
+    secretName: az-domain-cert-pemkey
+    path: /usr/share/opensearch-dashboards/certs/esnode-key.pem
+    subPath: esnode-key.pem
+    # path: /usr/share/opensearch/config/pemkey.pem
+    # subPath: pemkey.pem
+    defaultMode: 384
+    # defaultMode: 0600
+  - name: az-domain-cert-pemtrustedcas
+    secretName: az-domain-cert-pemtrustedcas
+    path: /usr/share/opensearch-dashboards/certs/root-ca.pem
+    subPath: root-ca.pem
+    # path: /usr/share/opensearch/config/pemtrustedcas.pem
+    # subPath: pemtrustedcas.pem
+    defaultMode: 384
 
 
 podAnnotations: {}
@@ -105,31 +129,100 @@ securityContext:
   runAsUser: 1000
   allowPrivilegeEscalation: false
 
-config: {}
+# config: {}
+#   # Default OpenSearch Dashboards configuration from docker image of Dashboards
+
+#   #  opensearch_dashboards.yml: |
+#   #   server:
+#   #     name: dashboards
+#   #     host: "{{ .Values.serverHost }}"
+
+#   #  opensearch_dashboards.yml:
+#   #   server:
+#   #     name: dashboards
+#   #     host: "{{ .Values.serverHost }}"
+
+
+#   # Dashboards TLS Config (Ensure the cert files are present before enabling SSL
+#       # ssl:
+#       #   enabled: true
+#       #   key: /usr/share/opensearch-dashboards/certs/dashboards-key.pem
+#       #   certificate: /usr/share/opensearch-dashboards/certs/dashboards-crt.pem
+
+#     # determines how dashboards will verify certificates (needs to be none for default opensearch certificates to work)
+#     # opensearch:
+#     #   ssl:
+#     #     certificateAuthorities: /usr/share/opensearch-dashboards/certs/dashboards-root-ca.pem
+#     #     if utilizing custom CA certs for connection to opensearch, provide the CA here
+
+
+config:
   # Default OpenSearch Dashboards configuration from docker image of Dashboards
 
-  #  opensearch_dashboards.yml: |
-  #   server:
-  #     name: dashboards
-  #     host: "{{ .Values.serverHost }}"
+   opensearch_dashboards.yml: |
+    server:
+      name: dashboards  # "your-hostname"
+      host: "{{ .Values.serverHost }}"
+      # basePath: "/opensearch/dashboard"  # "{{ .Values.serverBasePath }}"
+      rewriteBasePath: false
+      maxPayloadBytes: 1048576
 
-  #  opensearch_dashboards.yml:
-  #   server:
-  #     name: dashboards
-  #     host: "{{ .Values.serverHost }}"
-
-
-  # Dashboards TLS Config (Ensure the cert files are present before enabling SSL
-      # ssl:
-      #   enabled: true
-      #   key: /usr/share/opensearch-dashboards/certs/dashboards-key.pem
-      #   certificate: /usr/share/opensearch-dashboards/certs/dashboards-crt.pem
+      # Dashboards TLS Config (Ensure the cert files are present before enabling SSL
+      ssl:
+        enabled: true
+        key: /usr/share/opensearch-dashboards/certs/esnode-key.pem
+        certificate: /usr/share/opensearch-dashboards/certs/esnode.pem
+        # key: /usr/share/opensearch-dashboards/certs/dashboards-key.pem
+        # certificate: /usr/share/opensearch-dashboards/certs/dashboards-crt.pem
 
     # determines how dashboards will verify certificates (needs to be none for default opensearch certificates to work)
-    # opensearch:
-    #   ssl:
-    #     certificateAuthorities: /usr/share/opensearch-dashboards/certs/dashboards-root-ca.pem
-    #     if utilizing custom CA certs for connection to opensearch, provide the CA here
+    opensearch:
+      username: "admin"
+      password: "admin"
+      ssl:
+        verificationMode: full
+        key: /usr/share/opensearch-dashboards/certs/esnode-key.pem
+        certificate: /usr/share/opensearch-dashboards/certs/esnode.pem
+        certificateAuthorities: /usr/share/opensearch-dashboards/certs/root-ca.pem
+        # if utilizing custom CA certs for connection to opensearch, provide the CA here
+
+      pingTimeout: 1500
+      requestTimeout: 30000
+      shardTimeout: 30000
+      logQueries: false
+      memoryCircuitBreaker:
+        enabled: false
+        maxPercentage: 1.0
+      
+      # requestHeadersWhitelist:
+      #   - authorization
+      # requestHeadersAllowlist:
+      #   - authorization
+      # customHeaders: {}
+    logging:
+      dest: stdout
+      silent: false
+      quiet: false
+      verbose: false
+    
+    i18n:
+      locale: "en"
+
+    opensearchDashboards.branding:
+      logo:
+        defaultUrl: ""
+        darkModeUrl: ""
+      mark:
+        defaultUrl: ""
+        darkModeUrl: ""
+      loadingLogo:
+        defaultUrl: ""
+        darkModeUrl: ""
+      faviconUrl: ""
+      applicationTitle: ""
+      useExpandedHeader: false
+
+
 
 opensearchDashboardsYml:
   defaultMode:
@@ -193,18 +286,22 @@ ingress:
 
 resources:
   requests:
-    cpu: "100m"
-    memory: "512M"
+    # cpu: "100m"
+    # memory: "512M"
+    cpu: "1"
+    memory: "3Gi"
   limits:
-    cpu: "100m"
-    memory: "512M"
+    # cpu: "100m"
+    # memory: "512M"
+    cpu: "2"
+    memory: "4Gi"
 
 autoscaling:
   # This requires metrics server to be installed, to install use kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
   # See https://github.com/kubernetes-sigs/metrics-server
-  enabled: false
+  enabled: true
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 80
 
 updateStrategy:

@@ -85,6 +85,29 @@ az aks nodepool add \
     --node-osdisk-size 128 \
     --node-osdisk-type Managed \
     --linux-os-config linuxosconfig.json
+
+
+az aks nodepool add \
+    --no-wait \
+    --cluster-name aks-data-dev \
+    --name workerpool \
+    --resource-group rg-quickdrawai \
+    --mode User \
+    --eviction-policy Delete \
+    --tags creator="youngju_kim" owner="youngju_kim" objective="ai-assistant 통합 backend" \
+    --node-vm-size "Standard_D4as_v5" \
+    --labels nodetype=worker spot=false \
+    --enable-cluster-autoscaler \
+    --min-count 1 \
+    --max-count 5 \
+    --os-type Linux \
+    --os-sku Ubuntu \
+    --kubernetes-version "1.26.3" \
+    --max-pods 110 \
+    --priority Regular \
+    --node-osdisk-size 256 \
+    --node-osdisk-type Managed \
+    --linux-os-config linuxosconfig.json
 ```
 
 ```bash

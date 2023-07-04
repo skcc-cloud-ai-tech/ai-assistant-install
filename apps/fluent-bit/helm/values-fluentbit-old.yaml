@@ -1,0 +1,416 @@
+# https://raw.githubusercontent.com/fluent/helm-charts/master/charts/fluent-bit/values.yaml
+# https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/OPENSEARCH/fluent-bit-configmap.yaml
+# Merged helm version ConfigMap with `yaml` version ConfigMap
+
+
+# kind -- DaemonSet or Deployment
+kind: DaemonSet
+
+# replicaCount -- Only applicable if kind=Deployment
+replicaCount: 1
+
+image:
+  repository: fluent/fluent-bit
+  pullPolicy: Always
+  # See: https://github.com/fluent/fluent-bit/issues/2522
+  # To Add Kubernetes Fields -> fluentbit 2.3.1 (fluent/fluent-bit 1.4.2)
+  tag: 1.8
+
+testFramework:
+  image:
+    repository: busybox
+    pullPolicy: Always
+    tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name:
+
+rbac:
+  create: true
+
+podSecurityPolicy:
+  create: false
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+dnsConfig: {}
+  # nameservers:
+  #   - 1.2.3.4
+  # searches:
+  #   - ns1.svc.cluster-domain.example
+  #   - my.dns.search.suffix
+  # options:
+  #   - name: ndots
+#     value: "2"
+#   - name: edns0
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 2020
+  labels:
+    {}
+  annotations:
+    {}
+    # prometheus.io/path: "/api/v1/metrics/prometheus"
+    # prometheus.io/port: "2020"
+    # prometheus.io/scrape: "true"
+
+serviceMonitor:
+  enabled: false
+  # namespace: monitoring
+  # interval: 10s
+  # scrapeTimeout: 10s
+  # selector:
+  #  prometheus: my-prometheus
+
+prometheusRule:
+  enabled: false
+  # namespace: ""
+  # additionnalLabels: {}
+  # rules:
+  # - alert: NoOutputBytesProcessed
+  #   expr: rate(fluentbit_output_proc_bytes_total[5m]) == 0
+  #   annotations:
+  #     message: |
+  #       Fluent Bit instance {{ $labels.instance }}'s output plugin {{ $labels.name }} has not processed any
+  #       bytes for at least 15 minutes.
+  #     summary: No Output Bytes Processed
+  #   for: 15m
+  #   labels:
+  #     severity: critical
+
+dashboards:
+  enabled: false
+  labelKey: grafana_dashboard
+  annotations: {}
+
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+# resources: {}
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+podAnnotations: {}
+
+podLabels: {}
+
+priorityClassName: ""
+
+# env: []
+env:
+  - name: FLUENT_CLUSTER_NAME
+    value: "corus-logging"
+  - name: FLUENT_OPENSEARCH_HOST
+    value: "OPENSEARCH"
+  - name: FLUENT_OPENSEARCH_PORT
+    value: "9200"
+  - name: OPENSEARCH_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: opensearch-cred
+        key: OPENSEARCH_USERNAME
+  - name: OPENSEARCH_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: opensearch-cred
+        key: OPENSEARCH_PASSWORD
+
+# envFrom: []
+envFrom:
+  - secretRef:
+      name: opensearch-cred
+
+extraPorts: []
+#   - port: 5170
+#     containerPort: 5170
+#     protocol: TCP
+#     name: tcp
+
+# extraVolumes: []
+extraVolumes:
+- name: opensearch-certs
+  secret:
+    secretName: opensearch-certs
+    items:
+    - key: esnode.pem
+      path: tls.crt
+    - key: esnode-key.pem
+      path: tls.key
+    - key: pemtrustedcas.pem
+      path: ca.crt
+    # - key: tls.crt
+    #   path: esnode.pem
+    # - key: tls.key
+    #   path: esnode-key.pem
+    # - key: ca.crt
+    #   path: pemtrustedcas.pem
+
+# extraVolumeMounts: []
+extraVolumeMounts:
+- name: opensearch-certs
+  mountPath: /usr/share/opensearch/config
+  readOnly: true
+
+
+updateStrategy: {}
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxUnavailable: 1
+
+# Make use of a pre-defined configmap instead of the one templated here
+existingConfigMap: ""
+
+networkPolicy:
+  enabled: false
+  # ingress:
+  #   from: []
+
+luaScripts: {}
+
+## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/configuration-file
+config:
+  service: |
+    [SERVICE]
+        Flush 1
+        Daemon Off
+        Log_Level info
+        Parsers_File parsers.conf
+        Parsers_File custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.service.port }}
+
+  ## https://docs.fluentbit.io/manual/pipeline/inputs
+  inputs: |
+    [INPUT]
+        Name               tail
+        Alias              corus-apps
+        Tag                kube_corus-apps.*
+        Path               /var/log/containers/*_corus_*.log
+        Parser             docker
+        Docker_Mode        On
+        # Docker_Mode_Parser spring-multiline
+
+
+  ## https://docs.fluentbit.io/manual/pipeline/filters
+  ## https://docs.fluentbit.io/manual/v/1.0/filter/kubernetes
+  filters: |
+    [FILTER]
+        Name                kubernetes
+        Match               kube_corus-apps.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Kube_Tag_Prefix     kube_corus-apps.var.log.containers.
+        Merge_Log           On
+        Merge_Log_Key       log_processed
+        Labels              On
+        Annotations         On
+        Buffer_Size         0
+    
+    # [FILTER]
+    #     Name                kubernetes
+    #     Match               kube_corus-cluster.*
+    #     Kube_URL            https://kubernetes.default.svc:443
+    #     Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    #     Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+    #     Kube_Tag_Prefix     kube_corus-cluster.var.log.containers.
+    #     Merge_Log           On
+    #     Merge_Log_Key       log_processed
+    #     Labels              On
+    #     Annotations         On
+    #     Buffer_Size         0
+
+    [FILTER]
+        Name modify
+        Match *
+        Add   kubernetes.cluster_name ${FLUENT_CLUSTER_NAME}
+        Copy  kubernetes.host         kubernetes.node_name
+
+  ## https://docs.fluentbit.io/manual/pipeline/outputs
+  
+  # Use 'Replace_Dots' to avoid '"mapper_parsing_exception': object mapping for [kubernetes.labels.app] tried to parse field [app] as object, but found a concrete value
+  outputs: |
+    [OUTPUT]
+        Name                opensearch
+        Match               kube_corus-apps.*
+        Host                ${FLUENT_OPENSEARCH_HOST}
+        Port                ${FLUENT_OPENSEARCH_PORT}
+        HTTP_User           ${OPENSEARCH_USERNAME}
+        HTTP_Passwd         ${OPENSEARCH_PASSWORD}
+        Index               fluent-bit
+        Type                _doc
+        Logstash_Format     On
+        Logstash_Prefix     corus-apps
+        Logstash_DateFormat %Y.%m.%d
+        Time_Key            @timestamp
+        Time_Key_Format     %Y-%m-%dT%H:%M:%S
+        Generate_ID         On
+        Replace_Dots        On
+        Retry_Limit         10 # False
+        Buffer_Size         False
+        Trace_Error         On
+        tls                 On
+        tls.verify          On
+        tls.debug           1
+        tls.ca_file         /usr/share/opensearch/config/ca.crt
+        tls.crt_file        /usr/share/opensearch/config/tls.crt
+        tls.key_file        /usr/share/opensearch/config/tls.key
+
+    # [OUTPUT]
+    #     Name                opensearch
+    #     Match               kube_opensearch-cluster.*
+    #     Host                ${FLUENT_OPENSEARCH_HOST}
+    #     Port                ${FLUENT_OPENSEARCH_PORT}
+    #     HTTP_User           ${OPENSEARCH_USERNAME}
+    #     HTTP_Passwd         ${OPENSEARCH_PASSWORD}
+    #     Index               fluent-bit
+    #     Type                _doc
+    #     Logstash_Format     On
+    #     Logstash_Prefix     corus-cluster
+    #     Logstash_DateFormat %Y.%m.%d
+    #     Time_Key            @timestamp
+    #     Time_Key_Format     %Y-%m-%dT%H:%M:%S
+    #     Generate_ID         On
+    #     Trace_Error         On
+    #     Replace_Dots        On
+    #     Retry_Limit         False
+    #     Buffer_Size         False
+    #     tls                 On
+    #     tls.verify          On
+    #     tls.debug           1
+    #     tls.ca_file         /usr/share/opensearch/config/ca.crt
+    #     tls.crt_file        /usr/share/opensearch/config/tls.crt
+    #     tls.key_file        /usr/share/opensearch/config/tls.key
+
+  ## https://docs.fluentbit.io/manual/pipeline/parsers
+  ## https://docs.fluentbit.io/manual/v/1.0/parser/regular_expression
+  customParsers: |
+    [PARSER]
+        Name    kfserving-multiline
+        Format  regex
+        Regex   \[[A-Za-z_]{1} (?<time>\d{6} \d{1,2}:\d{1,2}:\d{1,2}) web:\d{1,6}\] (?<log>.*)
+        Time_Format %y%m%d %H:%M:%S
+        Time_Key time
+    [PARSER]
+        Name    spring-multiline
+        Format  regex
+        Regex   (?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,6}) (?<log>.*)
+        Time_Format %Y-%m-%d %H:%M:%S
+        Time_Key time
+    [PARSER]
+        Name    k8s-metadata
+        Format  regex
+        Regex   ^kube-(?<tag>[^_]+)?\_?(?<pod_name>[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace_name>[^_]+)_(?<container_name>.+)-(?<docker_id>[a-z0-9]{64})\.log$
+
+    [PARSER]
+        Name    kube-custom
+        Format  regex
+        Regex   (?<tag>[^.]+)?\.?(?<pod_name>[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace_name>[^_]+)_(?<container_name>.+)-(?<docker_id>[a-z0-9]{64})\.log$
+
+    [PARSER]
+        Name    filter-kube-test
+        Format  regex
+        Regex   (?<pod_name>[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace_name>[^_]+)_(?<container_name>.+)-(?<docker_id>[a-z0-9]{64})\.log$
+
+    [PARSER]
+        Name    nested-multilines
+        Format  regex
+        Regex   {"log":"(?<log>.*)","stream":"(?<stream>.*)","time":"(?<time>.*)"}$
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+
+    [PARSER]
+        Name   nested-json
+        Format json
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+
+    [PARSER]
+        Name   apache
+        Format regex
+        Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+    
+    [PARSER]
+        Name   apache2
+        Format regex
+        Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+    
+    [PARSER]
+        Name   apache_error
+        Format regex
+        Regex  ^\[[^ ]* (?<time>[^\]]*)\] \[(?<level>[^\]]*)\](?: \[pid (?<pid>[^\]]*)\])?( \[client (?<client>[^\]]*)\])? (?<message>.*)$
+    
+    [PARSER]
+        Name   nginx
+        Format regex
+        Regex ^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+    
+    [PARSER]
+        Name   json
+        Format json
+        Time_Key time
+        Time_Format %d/%b/%Y:%H:%M:%S %z
+    
+    [PARSER]
+        Name        docker
+        Format      json
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep   On
+    
+    [PARSER]
+        # http://rubular.com/r/tjUt3Awgg4
+        Name cri
+        Format regex
+        Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+    
+    [PARSER]
+        Name        syslog
+        Format      regex
+        Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
+        Time_Key    time
+        Time_Format %b %d %H:%M:%S

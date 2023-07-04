@@ -44,6 +44,22 @@ helm upgrade --install opensearch-dashboards \
   -f values-opensearch-dashboards.yaml
 ```
 
+* `TLS`
+
+```bash
+helm upgrade --install opensearch \
+  ./opensearch \
+  -n opensearch \
+  --create-namespace \
+  -f values-opensearch-tls.yaml
+
+helm upgrade --install opensearch-dashboards \
+  ./opensearch-dashboards \
+  -n opensearch \
+  --create-namespace \
+  -f values-opensearch-dashboards-tls.yaml
+```
+
 ```bash
 az aks update --enable-blob-driver -n aks-data-dev -g rg-quickdrawai
 ```

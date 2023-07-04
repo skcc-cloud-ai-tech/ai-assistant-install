@@ -33,3 +33,18 @@ helm upgrade --install redis \
 ```bash
 
 ```
+
+```bash
+  - name: opensearch
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  - name: opensearch-dashboard
+    port: 5601
+    protocol: TCP
+    targetPort: 5601
+  - name: redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+```

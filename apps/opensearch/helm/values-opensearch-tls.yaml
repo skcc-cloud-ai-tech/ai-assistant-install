@@ -149,9 +149,12 @@ config:
         allow_default_init_securityindex: true
         authcz:
           admin_dn:
-            - CN='opensearch.dev.corus-ai.net'
+            - CN='opensearch.corus-ai.net'
             - CN='data.dev.corus-ai.net'
             - CN='db.corus-ai.net'
+            - CN='opensearch-cluster-master-headless.opensearch.svc.cluster.local'
+            - CN='opensearch-cluster-master-headless'
+            - CN='opensearch-cluster-master'
         nodes_dn:
           - 'CN=*.corus-ai.net'
           - 'CN=opensearch-cluster*'

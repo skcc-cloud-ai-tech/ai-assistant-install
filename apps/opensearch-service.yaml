@@ -1,37 +1,42 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: istio-gateway
+  name: istio-opensearch-gateway
   namespace: istio-system
 spec:
   selector:
-    # app: istio-gateway
     istio: gateway
   servers:
-  - port:
-      number: 80
+  - hosts:
+    - opensearch.corus-ai.net
+    port:
       name: http
+      number: 80
       protocol: HTTP
-    hosts:
-    - "*"
-  - port:
-      number: 3306
+  - hosts:
+    - db.corus-ai.net
+    port:
       name: mysql
+      number: 3306
       protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
-  - port:
-      number: 9200
+  - hosts:
+    - redis.corus-ai.net
+    port:
+      name: redis
+      number: 6379
+      protocol: TCP
+  - hosts:
+    - opensearch.corus-ai.net
+    port:
       name: opensearch
+      number: 9200
       protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
-  - port:
-      number: 5601
+  - hosts:
+    - opensearch.corus-ai.net
+    port:
       name: opensearch-dashboard
+      number: 5601
       protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -40,16 +45,16 @@ metadata:
   namespace: opensearch
 spec:
   hosts:
-  - 'db.quickdrawai.net'
+  - 'opensearch.corus-ai.net'
   gateways:
-  - istio-system/istio-gateway
+  - istio-system/istio-opensearch-gateway
   - mesh # applies to all the sidecars in the mesh
   tcp:
   - match:
     - port: 9200
     route:
     - destination:
-        host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+        host: opensearch-cluster-master.opensearch.svc.cluster.local
         port:
           number: 9200
   - match:
@@ -74,7 +79,7 @@ spec:
     - destination:
         port:
           number: 9200
-        host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+        host: opensearch-cluster-master.opensearch.svc.cluster.local
   - match:
     # - headers:
     #     cookie:
@@ -83,10 +88,30 @@ spec:
         prefix: /opensearch/dashboard/
     - uri:
         prefix: /opensearch/dashboard
-    rewrite:
-      uri: "/"
+    # rewrite:
+    #   uri: "/"
     route:
     - destination:
         port:
           number: 5601
         host: opensearch-dashboards.opensearch.svc.cluster.local
+
+  # tls:
+  # - match:
+  #   - port: 443
+  #     sniHosts:
+  #     - opensearch.corus-ai.net
+  #   - uri:
+  #       prefix: /opensearch/dashboard/
+  #   - uri:
+  #       prefix: /opensearch/dashboard
+  #   route:
+  #   - destination:
+  #       host: opensearch-cluster-master.opensearch.svc.cluster.local
+  # - match:
+  #   - port: 443
+  #     sniHosts:
+  #     - opensearch.corus-ai.net
+  #   route:
+  #   - destination:
+  #       host: reviews.prod.svc.cluster.local
