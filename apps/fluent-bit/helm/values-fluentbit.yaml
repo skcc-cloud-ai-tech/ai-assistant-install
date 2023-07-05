@@ -444,7 +444,8 @@ config:
         # Parser             cri
         # Docker_Mode        On
         # Docker_Mode_Parser fastapi-multiline-without-colors
-        multiline.parser      multiline-regex-without-colors-cri
+        multiline.parser      multiline-regex-without-colors
+        # multiline.parser      multiline-regex-without-colors-cri
         # multiline.parser      multiline-regex-without-colors-docker
         # multiline.parser      cri
         # read_from_head      false
@@ -458,11 +459,11 @@ config:
     #     K8S-Logging.Parser On
     #     K8S-Logging.Exclude On
 
-    [FILTER]
-        name              parser
-        match             *
-        Key_Name          log
-        Parser            cri-custom
+    # [FILTER]
+    #     name              parser
+    #     match             *
+    #     Key_Name          log
+    #     Parser            cri-custom
 
     # [FILTER]
     #     name                  multiline
@@ -472,7 +473,6 @@ config:
     [FILTER]
         Name      modify
         Match     *
-        Rename    message                log
         Add       kubernetes.cluster_name ${FLUENT_CLUSTER_NAME}
         Copy      kubernetes.host         kubernetes.node_name
 
@@ -484,13 +484,13 @@ config:
     #     # Multiline.parser        multiline-regex
 
 
-    # [FILTER]
-    #     Name              parser
-    #     Match             kube_corus-apps.*
-    #     Key_Name          log
-    #     # Parser            fastapi-multiline
-    #     Parser            fastapi-multiline-without-colors
-    #     # Reserve_Data      On
+    [FILTER]
+        Name              parser
+        Match             kube_corus-apps.*
+        Key_Name          log
+        # Parser            fastapi-multiline
+        Parser            fastapi-multiline-without-colors
+        # Reserve_Data      On
 
     [FILTER]
         Name                kubernetes
@@ -638,6 +638,8 @@ config:
     [MULTILINE_PARSER]
         name          multiline-regex-without-colors
         type          regex
+        parser        cri-custom
+        key_content   log
         flush_timeout 1000s
         #
         # Regex rules for multiline parsing
@@ -651,7 +653,7 @@ config:
         # rules |   state name  | regex pattern                  | next state
         # ------|---------------|--------------------------------------------
         rule      "start_state"   "/^(\W*\[\d+m\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3})(.*)/"  "cont"
-        rule      "cont"          "/(?!\W*\[\d+m\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3})(.*)/"  "cont"
+        rule      "cont"          "/^(?!\W*\[\d+m\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3}).*/"  "cont"
 
     [PARSER]
         Name docker_no_time
@@ -664,16 +666,16 @@ config:
     [PARSER]
         Name    fastapi-multiline
         Format  regex
-        Regex   ^(?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3})\s*(?<level>\S+)\s*(?<process>\d+) --- \[\s*(?<funcName>\S*)\] (?<objectName>\S*)(?<message>[\s\S]*?)(?=\g<time>|\Z)
+        Regex   ^(?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3})\s*(?<level>\S+)\s*(?<process>\d+) --- \[\s*(?<funcName>\S*)\] (?<objectName>\S*)(?<log>[\s\S]*?)(?=\g<time>|\Z)
         # Time_Format %y%m%d %H:%M:%S
         # Time_Key time
 
     [PARSER]
         Name    fastapi-multiline-without-colors
         Format  regex
-        Regex   ^\W*\[\d+m(?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3})\W\[\d+m\s*\W\[\d+;\d+m(?<level>\S+)\s*\W\[\d+m\s*(?<process>\d+) --- \[\s*(?<funcName>\S*)\]\s*\W\[\d+m\s*(?<objectName>\S*)\s*\W\[\d+m : (\W\[\d+m)?(?<message>[\s\S]*?)(?=\g<time>|\W\[\d+m|\Z)
-        # Time_Format %y%m%d %H:%M:%S
-        # Time_Key time
+        Regex   ^\W*\[\d+m(?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,3})\W\[\d+m\s*\W\[\d+;\d+m(?<level>\S+)\s*\W\[\d+m\s*(?<process>\d+) --- \[\s*(?<funcName>\S*)\]\s*\W\[\d+m\s*(?<objectName>\S*)\s*\W\[\d+m : (\W\[\d+m)?(?<log>[\s\S]*?)(?=\g<time>|\W\[\d+m|\Z)
+        Time_Format %y%m%d %H:%M:%S.%L
+        Time_Key time
 
     [PARSER]
         Name    spring-multiline
@@ -685,7 +687,7 @@ config:
     [PARSER]
         Name    spring-multiline2
         Format  regex
-        Regex   ^(?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})\s*(?<level>\S+) (?<pid>\d+) --- \[(?<thread>[\s\S]*?)\] (?<class>\S+)\s*:\s*(?<message>[\s\S]*?)(?=\g<time>|\Z)
+        Regex   ^(?<time>\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}.\d{1,6})\s*(?<level>\S+) (?<pid>\d+) --- \[(?<thread>[\s\S]*?)\] (?<class>\S+)\s*:\s*(?<log>[\s\S]*?)(?=\g<time>|\Z)
         Time_Format %Y-%m-%d %H:%M:%S
         Time_Key time
     
