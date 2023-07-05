@@ -1,1 +1,1 @@
-# ai-assistant-install
+# corus-install

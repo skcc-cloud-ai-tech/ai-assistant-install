@@ -19,7 +19,7 @@ global:
   # storageClass: ""
   storageClass: "azureblob-fuse-premium"
   redis:
-    password: ""
+    password: "Quickdraw!"
 
 ## @section Common parameters
 ##
@@ -453,7 +453,7 @@ master:
       - ReadWriteOnce
     ## @param master.persistence.size Persistent Volume size
     ##
-    size: 100Gi  # 8Gi
+    size: 500Gi  # 8Gi
     ## @param master.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}

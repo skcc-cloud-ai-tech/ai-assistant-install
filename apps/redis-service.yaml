@@ -1,43 +1,26 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: istio-gateway
+  name: istio-redis-gateway
   namespace: istio-system
 spec:
   selector:
-    # app: istio-gateway
     istio: gateway
   servers:
-  - port:
-      number: 80
+  - hosts:
+    - redis.corus-ai.net
+    - redis.dev.corus-ai.net
+    port:
       name: http
+      number: 80
       protocol: HTTP
-    hosts:
-    - "*"
-  - port:
-      number: 3306
-      name: mysql
-      protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
-  - port:
-      number: 6379
+  - hosts:
+    - redis.corus-ai.net
+    - redis.dev.corus-ai.net
+    port:
       name: redis
+      number: 6379
       protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
-  - port:
-      number: 9200
-      name: opensearch
-      protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
-  - port:
-      number: 5601
-      name: opensearch-dashboard
-      protocol: TCP
-    hosts:
-    - "db.quickdrawai.net"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -46,31 +29,35 @@ metadata:
   namespace: redis
 spec:
   hosts:
-  - 'db.quickdrawai.net'
+  - 'redis.corus-ai.net'
+  - 'redis.dev.corus-ai.net'
   gateways:
-  - istio-system/istio-gateway
+  - istio-system/istio-redis-gateway
   - mesh # applies to all the sidecars in the mesh
   tcp:
   - match:
     - port: 6379
     route:
     - destination:
-        host: redis-headless.redis.svc.cluster.local
+        host: redis-master.redis.svc.cluster.local
         port:
           number: 6379
-  # http:
+  # tls:
   # - match:
-  #   # - headers:
-  #   #     cookie:
-  #   #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+  #   - port: 443
+  #     sniHosts:
+  #     - opensearch.corus-ai.net
   #   - uri:
-  #       prefix: /opensearch/
+  #       prefix: /opensearch/dashboard/
   #   - uri:
-  #       prefix: /opensearch
-  #   rewrite:
-  #     uri: "/"
+  #       prefix: /opensearch/dashboard
   #   route:
   #   - destination:
-  #       port:
-  #         number: 9200
-  #       host: fastapi-demo.default.svc.cluster.local
+  #       host: opensearch-cluster-master.opensearch.svc.cluster.local
+  # - match:
+  #   - port: 443
+  #     sniHosts:
+  #     - opensearch.corus-ai.net
+  #   route:
+  #   - destination:
+  #       host: reviews.prod.svc.cluster.local
