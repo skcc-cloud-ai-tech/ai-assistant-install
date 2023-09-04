@@ -9,7 +9,7 @@ See: https://learn.microsoft.com/en-us/azure/aks/azure-blob-csi?tabs=Blobfuse#be
 
 ```bash
 $ az aks update --enable-blob-driver \
-    -n aks-data \
+    -n aks-data-dev \
     -g rg-quickdrawai
 
 Please make sure there is no open-source Blob CSI driver installed before enabling. (y/N): y
@@ -21,7 +21,7 @@ See: https://learn.microsoft.com/en-us/azure/aks/use-managed-identity#bring-your
 
 ```bash
 $ az aks show \
-    -n aks-data \
+    -n aks-data-dev \
     -g rg-quickdrawai \
     --query "servicePrincipalProfile"
 {
