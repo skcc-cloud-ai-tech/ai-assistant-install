@@ -111,75 +111,75 @@ config:
 
     plugins:
       security:
-        ssl:
-          transport:
-            enabled: true
-            pemcert_filepath: esnode.pem
-            pemkey_filepath: esnode-key.pem
-            pemtrustedcas_filepath: root-ca.pem
+        disabled: true
+        # ssl:
+        #   transport:
+        #     enabled: true
+        #     pemcert_filepath: esnode.pem
+        #     pemkey_filepath: esnode-key.pem
+        #     pemtrustedcas_filepath: root-ca.pem
 
-            # keystore_type: "PFX"
-            # keystore_filepath: keystore.pfx
-            # keystore_alias: keystore
-            # truststore_type: "PFX"
-            # truststore_filepath: keystore.pfx
-            # truststore_alias: keystore
-            # pemcert_filepath: pemcert.pem
-            # pemkey_filepath: pemkey.pem
-            # pemtrustedcas_filepath: pemtrustedcas.pem
-            enforce_hostname_verification: false
-          http:
-            enabled: true
-            pemcert_filepath: esnode.pem
-            pemkey_filepath: esnode-key.pem
-            pemtrustedcas_filepath: root-ca.pem
-            # keystore_type: "PFX"
-            # keystore_filepath: keystore.pfx
-            # keystore_alias: keystore
-            # truststore_type: "PFX"
-            # truststore_filepath: keystore.pfx
-            # truststore_alias: keystore
-            # pemcert_filepath: pemcert.pem
-            # pemkey_filepath: pemkey.pem
-            # pemtrustedcas_filepath: pemtrustedcas.pem
+        #     # keystore_type: "PFX"
+        #     # keystore_filepath: keystore.pfx
+        #     # keystore_alias: keystore
+        #     # truststore_type: "PFX"
+        #     # truststore_filepath: keystore.pfx
+        #     # truststore_alias: keystore
+        #     # pemcert_filepath: pemcert.pem
+        #     # pemkey_filepath: pemkey.pem
+        #     # pemtrustedcas_filepath: pemtrustedcas.pem
+        #     enforce_hostname_verification: false
+        #   http:
+        #     enabled: true
+        #     pemcert_filepath: esnode.pem
+        #     pemkey_filepath: esnode-key.pem
+        #     pemtrustedcas_filepath: root-ca.pem
+        #     # keystore_type: "PFX"
+        #     # keystore_filepath: keystore.pfx
+        #     # keystore_alias: keystore
+        #     # truststore_type: "PFX"
+        #     # truststore_filepath: keystore.pfx
+        #     # truststore_alias: keystore
+        #     # pemcert_filepath: pemcert.pem
+        #     # pemkey_filepath: pemkey.pem
+        #     # pemtrustedcas_filepath: pemtrustedcas.pem
 
-            # clientauth_mode: OPTIONAL  # NONE, REQUIRE
-        # roles_mapping_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
-        allow_unsafe_democertificates: false  # Set true to avoid the error (Caused by: java.lang.RuntimeException: Demo certificates found)
-        allow_default_init_securityindex: true
-        authcz:
-          admin_dn:
-            - CN='opensearch.codev-ai.net'
-            - CN='opensearch-dashboard.codev-ai.net'
-            - CN='opensearch.prd.corus-ai.net'
-            - CN='opensearch-dashboard.prd.corus-ai.net'
-            - CN='opensearch-cluster-master-headless.opensearch.svc.cluster.local'
-            - CN='opensearch-cluster-master-headless'
-            - CN='opensearch-cluster-master'
-        nodes_dn:
-          - 'CN=*.corus-ai.net'
-          - 'CN=opensearch-cluster*'
-        audit.type: internal_opensearch
-        enable_snapshot_restore_privilege: true
-        check_snapshot_restore_write_privileges: true
-        restapi:
-          roles_enabled: ["all_access", "security_rest_api_access"]
-          # password_validation_regex: '(?=.*[A-Z])(?=.*[^a-zA-Z\d])(?=.*[0-9])(?=.*[a-z]).{8,}'
-        system_indices:
-          enabled: true
-          indices:
-            [
-              ".opendistro-alerting-config",
-              ".opendistro-alerting-alert*",
-              ".opendistro-anomaly-results*",
-              ".opendistro-anomaly-detector*",
-              ".opendistro-anomaly-checkpoints",
-              ".opendistro-anomaly-detection-state",
-              ".opendistro-reports-*",
-              ".opendistro-notifications-*",
-              ".opendistro-notebooks",
-              ".opendistro-asynchronous-search-response*",
-            ]
+        #     # clientauth_mode: OPTIONAL  # NONE, REQUIRE
+        # # roles_mapping_resolution: MAPPING_ONLY  # Fix 	Suppressed: java.lang.IllegalArgumentException: unknown secure setting [root-ca.pem] please check that any required plugins are installed, or check the breaking changes documentation for removed settings
+        # allow_unsafe_democertificates: false  # Set true to avoid the error (Caused by: java.lang.RuntimeException: Demo certificates found)
+        # allow_default_init_securityindex: true
+        # authcz:
+        #   admin_dn:
+        #     - CN='opensearch.corus-ai.net'
+        #     - CN='data.dev.corus-ai.net'
+        #     - CN='db.corus-ai.net'
+        #     - CN='opensearch-cluster-master-headless.opensearch.svc.cluster.local'
+        #     - CN='opensearch-cluster-master-headless'
+        #     - CN='opensearch-cluster-master'
+        # nodes_dn:
+        #   - 'CN=*.corus-ai.net'
+        #   - 'CN=opensearch-cluster*'
+        # audit.type: internal_opensearch
+        # enable_snapshot_restore_privilege: true
+        # check_snapshot_restore_write_privileges: true
+        # restapi:
+        #   roles_enabled: ["all_access", "security_rest_api_access"]
+        #   # password_validation_regex: '(?=.*[A-Z])(?=.*[^a-zA-Z\d])(?=.*[0-9])(?=.*[a-z]).{8,}'
+        # system_indices:
+        #   enabled: true
+        #   indices:
+        #     [
+        #       ".opendistro-alerting-config",
+        #       ".opendistro-alerting-alert*",
+        #       ".opendistro-anomaly-results*",
+        #       ".opendistro-anomaly-detector*",
+        #       ".opendistro-anomaly-checkpoints",
+        #       ".opendistro-anomaly-detection-state",
+        #       ".opendistro-reports-*",
+        #       ".opendistro-notifications-*",
+        #       ".opendistro-notebooks",
+        #       ".opendistro-asynchronous-search-response*",
+        #     ]
   # log4j2.properties:
 
 # Extra environment variables to append to this nodeGroup
@@ -202,38 +202,38 @@ envFrom: []
 # A list of secrets and their paths to mount inside the pod
 # This is useful for mounting certificates for security and for mounting
 # the X-Pack license
-# secretMounts: []
-secretMounts:
-  - name: az-domain-cert-pemcert
-    secretName: az-domain-cert-pemcert
-    path: /usr/share/opensearch/config/esnode.pem
-    subPath: esnode.pem
-    # path: /usr/share/opensearch/config/pemcert.pem
-    # subPath: pemcert.pem
-    defaultMode: 384 # 448=700, 384=600, 420=644
-    # defaultMode: 0600
-  - name: az-domain-cert-pemkey
-    secretName: az-domain-cert-pemkey
-    path: /usr/share/opensearch/config/esnode-key.pem
-    subPath: esnode-key.pem
-    # path: /usr/share/opensearch/config/pemkey.pem
-    # subPath: pemkey.pem
-    defaultMode: 384
-    # defaultMode: 0600
-  - name: az-domain-cert-pemtrustedcas
-    secretName: az-domain-cert-pemtrustedcas
-    path: /usr/share/opensearch/config/root-ca.pem
-    subPath: root-ca.pem
-    # path: /usr/share/opensearch/config/pemtrustedcas.pem
-    # subPath: pemtrustedcas.pem
-    defaultMode: 384
-  # - name: az-domain-keystore
-  #   secretName: az-domain-keystore
-  #   # path: /usr/share/opensearch/config/keystore.pfx
-  #   path: /usr/share/opensearch/config/opensearch.keystore
-  #   subPath: keystore.pfx
-  #   defaultMode: 384
-    # defaultMode: 0600
+secretMounts: []
+# secretMounts:
+#   - name: az-domain-cert-pemcert
+#     secretName: az-domain-cert-pemcert
+#     path: /usr/share/opensearch/config/esnode.pem
+#     subPath: esnode.pem
+#     # path: /usr/share/opensearch/config/pemcert.pem
+#     # subPath: pemcert.pem
+#     defaultMode: 384 # 448=700, 384=600, 420=644
+#     # defaultMode: 0600
+#   - name: az-domain-cert-pemkey
+#     secretName: az-domain-cert-pemkey
+#     path: /usr/share/opensearch/config/esnode-key.pem
+#     subPath: esnode-key.pem
+#     # path: /usr/share/opensearch/config/pemkey.pem
+#     # subPath: pemkey.pem
+#     defaultMode: 384
+#     # defaultMode: 0600
+#   - name: az-domain-cert-pemtrustedcas
+#     secretName: az-domain-cert-pemtrustedcas
+#     path: /usr/share/opensearch/config/root-ca.pem
+#     subPath: root-ca.pem
+#     # path: /usr/share/opensearch/config/pemtrustedcas.pem
+#     # subPath: pemtrustedcas.pem
+#     defaultMode: 384
+#   # - name: az-domain-keystore
+#   #   secretName: az-domain-keystore
+#   #   # path: /usr/share/opensearch/config/keystore.pfx
+#   #   path: /usr/share/opensearch/config/opensearch.keystore
+#   #   subPath: keystore.pfx
+#   #   defaultMode: 384
+#     # defaultMode: 0600
   
   # - name: az-domain-cert-pem-cert
   #   secretName: az-domain-cert
@@ -342,7 +342,11 @@ persistence:
   #   GKE, AWS & OpenStack)
   #
   # storageClass: "-"
-  storageClass: "azureblob-fuse-premium"
+  # storageClass: "azureblob-fuse-premium"
+  # storageClass: "opensearch-azureblob-nfs-premium"
+  # storageClass: "opensearch-azureblob-fuse-premium"
+  storageClass: "opensearch-azurefile-csi-premium"
+  # storageClass: "opensearch-azurefile-premium"
   accessModes:
     - ReadWriteOnce
   size: 2Ti  # 8Gi
@@ -520,13 +524,71 @@ securityConfig:
     # * It is an error to define both data and securityConfigSecret.
     securityConfigSecret: ""
     dataComplete: true
-    data: {}
-      # config.yml: |-
-      # internal_users.yml: |-
-      # roles.yml: |-
-      # roles_mapping.yml: |-
-      # action_groups.yml: |-
-      # tenants.yml: |-
+    # data: {}
+    #   # config.yml: |-
+    #   # internal_users.yml: |-
+    #   # roles.yml: |-
+    #   # roles_mapping.yml: |-
+    #   # action_groups.yml: |-
+    #   # tenants.yml: |-
+    data:
+      config.yml: |
+          config:
+            dynamic:
+              # kibana:
+              #   multitenancy_enabled: true
+              #   server_username: kibanaserver
+              #   index: '.kibana'
+              http:
+                anonymous_auth_enabled: false
+                # xff: # optional section
+                #   enabled: <true|false>
+                #   internalProxies: <string> # Regex pattern
+                #   remoteIpHeader: <string> # Name of the header in which to look. Typically: x-forwarded-for
+                #   proxiesHeader: <string>
+                #   trustedProxies: <string> # Regex pattern
+              authc:
+                basic_internal_auth_domain:
+                    http_enabled: true
+                    transport_enabled: true
+                    order: 1
+                    http_authenticator:
+                      type: basic
+                      challenge: false
+                  authentication_backend:
+                      type: internal
+
+                # openid_auth_domain:
+                #   http_enabled: true
+                #   transport_enabled: true
+                #   order: 1
+                #   http_authenticator:
+                #     type: basic
+                #     challenge: true # false
+                #     config:
+                #       openid_connect_idp:
+                #         enable_ssl: true
+                #         pemtrustedcas_filepath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+                #         verify_hostnames: false
+                #       subject_key: preferred_username
+                #       roles_key: roles
+                #       openid_connect_url: https://keycloak.mydomain.com/realms/master/.well-known/openid-configuration
+                #   authentication_backend:
+                #     type: noop
+
+                # clientcert_auth_domain:
+                #   description: "Authenticate via SSL client certificates"
+                #   http_enabled: true
+                #   transport_enabled: true
+                #   order: 0
+                #   http_authenticator:
+                #     type: clientcert
+                #     config:
+                #       username_attribute: cn #optional, if omitted DN becomes username
+                #     challenge: false
+                #   authentication_backend:
+                #     type: noop
+
 
 # How long to wait for opensearch to stop gracefully
 terminationGracePeriod: 120
@@ -566,7 +628,8 @@ imagePullSecrets: []
 nodeSelector:
   kubernetes.io/os: linux
   nodetype: worker
-  spot: "false"
+  devicetype: "cpu-data"
+  # spot: "false"
 tolerations: []
 
 # Enabling this will publically expose your OpenSearch instance.

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app/group: corus
+  name: opensearch-cred
+  namespace: logging
+type: Opaque
+stringData:
+  username: "admin"
+  password: "admin"

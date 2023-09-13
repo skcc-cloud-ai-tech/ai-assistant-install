@@ -29,6 +29,13 @@ helm upgrade --install fluent-bit \
   > upgrade_fluent-bit.log # > 2>&1
 k -n ${NAMESPACE} rollout restart daemonset fluent-bit
 
+
+
+helm upgrade --install fluent-bit \
+  ./fluent-bit \
+  --namespace ${NAMESPACE} \
+  --create-namespace \
+  --values=values-fluentbit-opensearch-http.yaml
 ```
 
 ```bash

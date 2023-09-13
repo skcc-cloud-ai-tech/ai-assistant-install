@@ -44,6 +44,21 @@ helm upgrade --install opensearch-dashboards \
   -f values-opensearch-dashboards.yaml
 ```
 
+```bash
+
+helm upgrade --install opensearch \
+  ./opensearch \
+  -n opensearch \
+  --create-namespace \
+  -f values-opensearch-http.yaml
+
+helm upgrade --install opensearch-dashboards \
+  ./opensearch-dashboards \
+  -n opensearch \
+  --create-namespace \
+  -f values-opensearch-dashboards-http.yaml
+```
+
 * `TLS`
 
 ```bash

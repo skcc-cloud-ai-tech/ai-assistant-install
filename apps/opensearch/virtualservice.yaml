@@ -1,16 +1,16 @@
 kubectl apply -f - <<EOF
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: vs-opensearch
   namespace: opensearch
 spec:
   hosts:
-  - '*.svc.cluster.local'
-  # - '*'
+  # - '*.opensearch.svc.cluster.local'
+  - '*'
   gateways:
-  - istio-system/istio-http-gateway
-  - mesh # applies to all the sidecars in the mesh
+  - istio-system/istio-corus-gateway
+  # - mesh # applies to all the sidecars in the mesh
   http:
   - match:
     # - headers:
@@ -35,8 +35,8 @@ spec:
         prefix: /api/opensearch/dashboard/
     - uri:
         prefix: /api/opensearch/dashboard
-    rewrite:
-      uri: "/"
+    # rewrite:
+    #   uri: "/"
     route:
     - destination:
         port:

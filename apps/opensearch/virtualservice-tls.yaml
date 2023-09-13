@@ -1,0 +1,59 @@
+kubectl apply -f - <<EOF
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: opensearch-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default ingress gateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - opensearch.codev-ai.net
+    - opensearch-dashboard.codev-ai.net
+    - opensearch.prd.corus-ai.net
+    - opensearch-dashboard.prd.corus-ai.net
+    tls:
+      mode: PASSTHROUGH
+      # mode: SIMPLE
+      # credentialName: httpbin-credential # must be the same as secret
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vs-opensearch
+  namespace: opensearch
+spec:
+  hosts:
+  - opensearch.codev-ai.net
+  - opensearch-dashboard.codev-ai.net
+  - opensearch.prd.corus-ai.net
+  - opensearch-dashboard.prd.corus-ai.net
+  gateways:
+  - istio-system/opensearch-gateway
+  # - mesh # applies to all the sidecars in the mesh
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - opensearch.codev-ai.net
+      - opensearch.prd.corus-ai.net
+    route:
+    - destination:
+        host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+        port:
+          number: 9200
+  - match:
+    - port: 443
+      sniHosts:
+      - opensearch-dashboard.codev-ai.net
+      - opensearch-dashboard.prd.corus-ai.net
+    route:
+    - destination:
+        host: opensearch-dashboards.opensearch.svc.cluster.local
+        port:
+          number: 5601
+EOF
