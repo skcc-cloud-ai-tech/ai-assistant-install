@@ -115,10 +115,50 @@ config:
       server:
         name: dashboards
         host: "{{ .Values.serverHost }}"
-        port: {{ .Values.service.port }}
         basePath: "/api/opensearch/dashboard"
         rewriteBasePath: false
         maxPayloadBytes: 1048576
+        ssl:
+          enabled: false
+      opensearch:
+        username: "admin"
+        password: "admin"
+        ssl:
+          verificationMode: none # full
+          # key: /usr/share/opensearch-dashboards/certs/esnode-key.pem
+          # certificate: /usr/share/opensearch-dashboards/certs/esnode.pem
+          # certificateAuthorities: /usr/share/opensearch-dashboards/certs/root-ca.pem
+          # # if utilizing custom CA certs for connection to opensearch, provide the CA here
+        pingTimeout: 1500
+        requestTimeout: 30000
+        shardTimeout: 30000
+        logQueries: false
+        memoryCircuitBreaker:
+          enabled: false
+          maxPercentage: 1.0
+      
+      logging:
+        dest: stdout
+        silent: false
+        quiet: false
+        verbose: false
+      
+      i18n:
+        locale: "en"
+
+      opensearchDashboards.branding:
+        logo:
+          defaultUrl: ""
+          darkModeUrl: ""
+        mark:
+          defaultUrl: ""
+          darkModeUrl: ""
+        loadingLogo:
+          defaultUrl: ""
+          darkModeUrl: ""
+        faviconUrl: ""
+        applicationTitle: ""
+        useExpandedHeader: false
 
   # Dashboards TLS Config (Ensure the cert files are present before enabling SSL
       # ssl:
