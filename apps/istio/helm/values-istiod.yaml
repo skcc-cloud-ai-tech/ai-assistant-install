@@ -157,7 +157,7 @@ telemetry:
     # stackdriver filter settings.
     stackdriver:
       enabled: false
-      logging: false
+      logging: fal1se
       monitoring: false
       topology: false # deprecated. setting this to true will have no effect, as this option is no longer supported.
       disableOutbound: false
@@ -186,6 +186,17 @@ ownerName: ""
 # See https://istio.io/docs/reference/config/istio.mesh.v1alpha1/ for all available options
 meshConfig:
   enablePrometheusMerge: true
+  meshConfig:
+    defaultConfig:
+        tracing:
+          zipkin:
+            address: jaeger-collector:9411
+          sampling: 10
+          custom_tags:
+            my_tag_header:
+              header:
+                project: ai-coding
+                profile: prd
 
 global:
   # Used to locate istiod.

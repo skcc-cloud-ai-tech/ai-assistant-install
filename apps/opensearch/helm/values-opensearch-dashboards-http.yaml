@@ -115,7 +115,7 @@ config:
       server:
         name: dashboards
         host: "{{ .Values.serverHost }}"
-        basePath: "/api/opensearch/dashboard"
+        basePath: "/monitoring/logs"
         rewriteBasePath: false
         maxPayloadBytes: 1048576
         ssl:

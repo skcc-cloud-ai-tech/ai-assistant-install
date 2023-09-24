@@ -1,0 +1,67 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: monitoring
+  namespace: istio-system
+spec:
+  hosts:
+  # - '*.opensearch.svc.cluster.local'
+  - '*'
+  gateways:
+  - istio-system/istio-corus-gateway
+  # - mesh # applies to all the sidecars in the mesh
+  http:
+  - match:
+    - uri:
+        prefix: /monitoring/grafana/
+    - uri:
+        prefix: /monitoring/grafana
+    # rewrite:
+    #   uri: "/"
+    route:
+    - destination:
+        port:
+          number: 3000
+        host: grafana.istio-system.svc.cluster.local
+  - match:
+    # - headers:
+    #     cookie:
+    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    - uri:
+        prefix: /monitoring/trace/
+    - uri:
+        prefix: /monitoring/trace
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        port:
+          number: 80
+        host: tracing.istio-system.svc.cluster.local
+  - match:
+    # - headers:
+    #     cookie:
+    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    - uri:
+        prefix: /monitoring/zipkin/
+    - uri:
+        prefix: /monitoring/zipkin
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        port:
+          number: 9411
+        host: zipkin.istio-system.svc.cluster.local
+  - match:
+    - uri:
+        prefix: /monitoring/logs/
+    - uri:
+        prefix: /monitoring/logs
+    # rewrite:
+    #   uri: "/"
+    route:
+    - destination:
+        port:
+          number: 5601
+        host: opensearch-dashboards.opensearch.svc.cluster.local

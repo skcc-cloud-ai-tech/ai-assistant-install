@@ -93,7 +93,7 @@ az ssh vm \
 
 AKS_RESOURCE_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-corus-prd" \
+    --name "aks-codev-prd" \
     --query id -o tsv)
 echo $AKS_RESOURCE_ID
 
@@ -191,7 +191,7 @@ cat << EOF > ./role-definition.json
 }
 EOF
 
-az role definition create --role-definition role-definition.json
+# az role definition create --role-definition role-definition.json
 
 az role assignment create \
   --role "Azure Kubernetes Service Cluster Admin - FullAccess" \
@@ -219,11 +219,11 @@ az role assignment create \
 #   --assignee $CORUS_PRD_ADMIN_ID \
 #   --scope $AKS_RESOURCE_ID
 
-# az aks get-credentials --resource-group "rg-corus" --name "aks-corus-prd" --admin
+# az aks get-credentials --resource-group "rg-corus" --name "aks-codev-prd" --admin
 
 AKS_RESOURCE_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-corus-prd" \
+    --name "aks-codev-prd" \
     --query id -o tsv)
 echo $AKS_RESOURCE_ID
 
@@ -258,7 +258,7 @@ VNET_ID=$(az network vnet show \
 
 AKS_OBJECT_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-corus-prd" \
+    --name "aks-codev-prd" \
     --query identity.principalId -o tsv)
 echo $AKS_OBJECT_ID
 
@@ -299,21 +299,22 @@ EOF
 
 az aks nodepool add \
     --no-wait \
-    --cluster-name aks-corus-prd \
-    --name workersdata \
+    --cluster-name aks-codev-prd \
+    --name workerdata \
     --resource-group rg-corus \
     --mode User \
     --eviction-policy Delete \
     --tags creator="youngju_kim" profile="prd" project="ai-coding" \
-    --node-vm-size "Standard_D8ds_v5" \
+    --node-vm-size "Standard_D4ds_v5" \
     --labels nodetype=worker devicetype=cpu-data \
     --enable-cluster-autoscaler \
+    --node-count 1 \
     --min-count 1 \
-    --max-count 3 \
+    --max-count 2 \
     --os-type Linux \
     --os-sku Ubuntu \
-    --kubernetes-version "1.26.3" \
-    --max-pods 110 \
+    --kubernetes-version "1.26.6" \
+    --max-pods 30 \
     --priority Regular \
     --node-osdisk-size 256 \
     --node-osdisk-type Managed \
@@ -322,7 +323,7 @@ az aks nodepool add \
     
 # az aks nodepool update \
 #     --name workersdata \
-#     --cluster-name aks-corus-prd \
+#     --cluster-name aks-codev-prd \
 #     --resource-group rg-corus \
 #     --kubelet-config ./linuxkubeletconfig.json
 ```
@@ -330,7 +331,7 @@ az aks nodepool add \
 
 ```bash
 az aks update --enable-blob-driver \
-    -n aks-corus-prd \
+    -n aks-codev-prd \
     -g rg-corus
 
 ```
@@ -908,7 +909,7 @@ SC_FILE_SHARE_ID="${SC_FILE_ID}/shares"
 
 AKS_OBJECT_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-corus-prd" \
+    --name "aks-codev-prd" \
     --query identity.principalId -o tsv)
 echo $AKS_OBJECT_ID
 
@@ -1283,4 +1284,219 @@ az keyvault secret set \
    --file ~/.ssh/bastion-corus-prd_key.pem \
    --description 'SSH Key for Bastion'
    --encoding ascii \
+```
+
+curl 'http://app.corus-ai.net/api/corus/backend/token' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Cookie: next-auth.csrf-token=7b0851d41a880cbe3028e1bb404259ad614d6418ad10bd7fec503767a518e0f2%7C8d8dacd6285908702a55a3f0e095ed74f9c68fa410a65dc0228858179b219ca0; next-auth.callback-url=http%3A%2F%2Fapp.corus-ai.net; csrftoken=Q8m0NV2Yfkth3rYkKpCfBg2gVaoI5POr' \
+  -H 'Origin: http://app.corus-ai.net' \
+  -H 'Referer: http://app.corus-ai.net/api/corus/backend/docs' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36' \
+  -H 'accept: application/json' \
+  --data-raw 'grant_type=&username=aaa&password=aaa&scope=&client_id=&client_secret=' \
+  --compressed
+
+curl -X POST 'http://localhost:8000/token' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'accept: application/json' \
+  --data-raw 'grant_type=&username=aaa&password=aaa&scope=&client_id=&client_secret=' \
+---
+
+
+```bash
+az vm extension set \
+    --publisher Microsoft.Azure.ActiveDirectory \
+    --name AADSSHLoginForLinux \
+    --resource-group rg-corus \
+    --vm-name bastion-vm-corus-prd
+
+az ssh vm \
+  --name "bastion-corus-prd" \
+  --resource-group "rg-corus" \
+   --prefer-private-ip
+  --certificate-file "${HOME}/.ssh/bastion-corus-prd_key.pem"
+
+az ssh vm \
+  --name "bastion-corus-prd" \
+  --resource-group "rg-corus" \
+  --ssh-key "${HOME}/.ssh/bastion-corus-prd_key.pem"
+#   --auth-type "ssh-key"
+
+az network bastion ssh \
+  --name "bastion-vnet-corus-prd" \
+  --resource-group "rg-corus" \
+  --target-resource-id "/subscriptions/f7137354-a978-47b6-8463-a82940478c01/resourceGroups/rg-corus/providers/Microsoft.Compute/virtualMachines/bastion-corus-prd" \
+  --auth-type "AAD" \
+  --ssh-key "${HOME}/.ssh/bastion-corus-prd_key.pem"
+#   --auth-type "ssh-key" \
+#   --username "corus" \
+#   --ssh-key "${HOME}/.ssh/bastion-corus-prd_key.pem"
+```
+
+# Security
+
+* Password Expiration (default: 90 days)
+
+```powershell
+Connect-AzureAD
+Get-AzureADUser -All $true | Set-AzureADUser -PasswordPolicies None
+```
+
+
+```bash
+az aks update \
+  --name aks-codev-prd \
+  --resource-group rg-corus \
+  --enable-azure-keyvault-kms \
+  --azure-keyvault-kms-key-id $KEY_ID \
+  --azure-keyvault-kms-key-vault-network-access "Private"  \
+  --azure-keyvault-kms-key-vault-resource-id $KEYVAULT_RESOURCE_ID
+```
+
+
+```bash
+az vm extension delete --name KeyVaultForLinux --resource-group rg-corus --vm-name bastion-corus-prd
+  az vm extension set -n "KeyVaultForLinux" --publisher Microsoft.Azure.KeyVault --resource-group "rg-corus" --vm-name "bastion-corus-prd" –settings .\akvvm.json –version 2.0
+
+az vm extension set \
+  -n "KeyVaultForLinux" \
+  --publisher Microsoft.Azure.KeyVault \
+  --resource-group "rg-corus" \
+  --vm-name "bastion-corus-prd" \
+  --settings .\akvvm.json \
+  --version 2.0
+
+```
+
+```json
+.akvvm.json
+{
+  "type": "Microsoft.Compute/virtualMachines/extensions",
+  "name": "KVVMExtensionForLinux",
+  "apiVersion": "2022-11-01",
+  "location": "<location>",
+  "dependsOn": [
+      "[concat('Microsoft.Compute/virtualMachines/', <vmName>)]"
+  ],
+  "properties": {
+  "publisher": "Microsoft.Azure.KeyVault",
+  "type": "KeyVaultForLinux",
+  "typeHandlerVersion": "2.0",
+  "autoUpgradeMinorVersion": true,
+  "enableAutomaticUpgrade": true,
+  "settings": {
+    "secretsManagementSettings": {
+      "pollingIntervalInS": <polling interval in seconds, e.g. "3600">,
+      "certificateStoreName": <It is ignored on Linux>,
+      "linkOnRenewal": <Not available on Linux e.g.: false>,
+      "certificateStoreLocation": <disk path where certificate is stored, default: "/var/lib/waagent/Microsoft.Azure.KeyVault">,
+      /var/lib/waagent/Microsoft.Azure.KeyVault.Store
+      "requireInitialSync": <initial synchronization of certificates e..g: true>,
+      "observedCertificates": <list of KeyVault URIs representing monitored certificates, e.g.: ["https://myvault.vault.azure.net/secrets/mycertificate", "https://myvault.vault.azure.net/secrets/mycertificate2"]>
+    },
+    "authenticationSettings": {
+      "msiEndpoint":  <Required when msiClientId is provided. MSI endpoint e.g. for most Azure VMs: "http://169.254.169.254/metadata/identity">,
+      "msiClientId":  <Required when VM has any user assigned identities. MSI identity e.g.: "c7373ae5-91c2-4165-8ab6-7381d6e75619".>
+    }
+    }
+  }
+}
+```
+
+```json
+{
+  "type": "Microsoft.Compute/virtualMachines/extensions",
+  "name": "KVVMExtensionForLinux",
+  "apiVersion": "2022-11-01",
+  "location": "koreacentral",
+  "dependsOn": [
+      "[concat('Microsoft.Compute/virtualMachines/', 'bastion-corus-prd')]"
+  ],
+  "properties": {
+  "publisher": "Microsoft.Azure.KeyVault",
+  "type": "KeyVaultForLinux",
+  "typeHandlerVersion": "2.0",
+  "autoUpgradeMinorVersion": true,
+  "enableAutomaticUpgrade": true,
+  "settings": {
+    "secretsManagementSettings": {
+      "pollingIntervalInS": "3600",
+      "certificateStoreLocation": "/var/lib/waagent/Microsoft.Azure.KeyVault.Store",
+      "requireInitialSync": true,
+      "observedCertificates": ["https://vault-corus.vault.azure.net/secrets/wildcard-skcc-com-no-password"]
+    },
+    "authenticationSettings": {
+      "msiEndpoint": "http://169.254.169.254/metadata/identity",
+      "msiClientId": "fc8495fb-6e1c-4f38-9f7b-d2bd500966cd"
+    }
+    }
+  }
+}
+```
+
+mid-bastion-vm-get-certs-from-vault
+fc8495fb-6e1c-4f38-9f7b-d2bd500966cd
+
+```bash
+az vm secret add \
+  --name bastion-corus-prd \
+  --resource-group rg-corus \
+  --keyvault /subscriptions/f7137354-a978-47b6-8463-a82940478c01/resourceGroups/rg-corus/providers/Microsoft.KeyVault/vaults/vault-corus \
+  --certificate cert-wildcard-skcc-com-no-password
+```
+
+---
+
+```bash
+export KEY_ID=$(az keyvault key show \
+  --name corus-customer-managed-key \
+  --vault-name vault-corus \
+  --query 'key.kid' -o tsv)
+echo $KEY_ID
+
+
+IDENTITY_OBJECT_ID=$(az identity show \
+  --name mid-aks-etcd-encrypt-key-vault \
+  --resource-group rg-corus \
+  --query 'principalId' -o tsv)
+echo $IDENTITY_OBJECT_ID
+
+az aks update \
+  --name aks-codev-prd \
+  --resource-group rg-corus \
+  --enable-azure-keyvault-kms \
+  --azure-keyvault-kms-key-vault-network-access "Private" \
+  --azure-keyvault-kms-key-vault-resource-id /subscriptions/f7137354-a978-47b6-8463-a82940478c01/resourceGroups/rg-corus/providers/Microsoft.KeyVault/vaults/vault-corus \
+  --azure-keyvault-kms-key-id $KEY_ID
+
+
+kubectl get secrets -A -o json | kubectl replace -f -
+
+```
+
+```bash
+az extension update --name aks-preview
+az feature register \
+  --namespace "Microsoft.ContainerService" \
+  --name "EnableAPIServerVnetIntegrationPreview"
+az feature show \
+  --namespace "Microsoft.ContainerService" \
+  --name "EnableAPIServerVnetIntegrationPreview"
+az provider register \
+  --namespace Microsoft.ContainerService
+
+
+az network vnet subnet list \
+  --resource-group rg-corus \
+  --vnet-name vnet-corus-prd
+
+
+az aks update \
+  -n aks-codev-prd \
+  -g rg-corus \
+  --enable-apiserver-vnet-integration \
+  --apiserver-subnet-id /subscriptions/f7137354-a978-47b6-8463-a82940478c01/resourceGroups/rg-corus/providers/Microsoft.Network/virtualNetworks/vnet-corus-prd/subnets/subnet-aks-app
+
 ```
