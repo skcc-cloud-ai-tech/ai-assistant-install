@@ -93,7 +93,7 @@ az ssh vm \
 
 AKS_RESOURCE_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-codev-prd" \
+    --name "aks-corus-prd" \
     --query id -o tsv)
 echo $AKS_RESOURCE_ID
 
@@ -219,11 +219,11 @@ az role assignment create \
 #   --assignee $CORUS_PRD_ADMIN_ID \
 #   --scope $AKS_RESOURCE_ID
 
-# az aks get-credentials --resource-group "rg-corus" --name "aks-codev-prd" --admin
+# az aks get-credentials --resource-group "rg-corus" --name "aks-corus-prd" --admin
 
 AKS_RESOURCE_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-codev-prd" \
+    --name "aks-corus-prd" \
     --query id -o tsv)
 echo $AKS_RESOURCE_ID
 
@@ -258,7 +258,7 @@ VNET_ID=$(az network vnet show \
 
 AKS_OBJECT_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-codev-prd" \
+    --name "aks-corus-prd" \
     --query identity.principalId -o tsv)
 echo $AKS_OBJECT_ID
 
@@ -299,7 +299,7 @@ EOF
 
 az aks nodepool add \
     --no-wait \
-    --cluster-name aks-codev-prd \
+    --cluster-name aks-corus-prd \
     --name workerdata \
     --resource-group rg-corus \
     --mode User \
@@ -323,7 +323,7 @@ az aks nodepool add \
     
 # az aks nodepool update \
 #     --name workersdata \
-#     --cluster-name aks-codev-prd \
+#     --cluster-name aks-corus-prd \
 #     --resource-group rg-corus \
 #     --kubelet-config ./linuxkubeletconfig.json
 ```
@@ -331,7 +331,7 @@ az aks nodepool add \
 
 ```bash
 az aks update --enable-blob-driver \
-    -n aks-codev-prd \
+    -n aks-corus-prd \
     -g rg-corus
 
 ```
@@ -792,73 +792,134 @@ spec:
 ```bash
 
 
-cat << EOF > ./blob-storage-role-definition.json
-{
-    "name": "Azure Kubernetes StorageClass Manage Blob Storage",
-    "description": "Create Blob PV/PVC in the cluster.",
-    "assignableScopes": [
-        "/subscriptions/f7137354-a978-47b6-8463-a82940478c01"
-    ],
-    "permissions": [
-        {
-            "actions": [
-                "Microsoft.Storage/*/read",
-                "Microsoft.Storage/storageAccounts/*",
-                "Microsoft.Storage/storageAccounts/blobServices/containers/read",
-                "Microsoft.Storage/storageAccounts/blobServices/containers/write",
-                "Microsoft.Storage/storageAccounts/blobServices/containers/delete",
-                "Microsoft.Storage/storageAccounts/listKeys/action"
-            ],
-            "notActions": [],
-            "dataActions": [
-                "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read",
-                "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write",
-                "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/delete"
-            ],
-            "notDataActions": []
-        }
-    ]
-}
-EOF
+# cat << EOF > ./blob-storage-role-definition.json
+# {
+#     "name": "Azure Kubernetes StorageClass Manage Blob Storage",
+#     "description": "Create Blob PV/PVC in the cluster.",
+#     "assignableScopes": [
+#         "/subscriptions/f7137354-a978-47b6-8463-a82940478c01"
+#     ],
+#     "permissions": [
+#         {
+#             "actions": [
+#                 "Microsoft.Storage/*/read",
+#                 "Microsoft.Storage/storageAccounts/*",
+#                 "Microsoft.Storage/storageAccounts/blobServices/containers/read",
+#                 "Microsoft.Storage/storageAccounts/blobServices/containers/write",
+#                 "Microsoft.Storage/storageAccounts/blobServices/containers/delete",
+#                 "Microsoft.Storage/storageAccounts/listKeys/action"
+#             ],
+#             "notActions": [],
+#             "dataActions": [
+#                 "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read",
+#                 "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write",
+#                 "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/delete"
+#             ],
+#             "notDataActions": []
+#         }
+#     ]
+# }
+# EOF
 
 # "assignableScopes": [
 #         "/subscriptions/f7137354-a978-47b6-8463-a82940478c01"
 #     ],
-cat << EOF > ./file-storage-role-definition.json
+# cat << EOF > ./file-storage-role-definition.json
+# {
+#     "name": "Azure Kubernetes StorageClass Manage Files",
+#     "description": "Create File PV/PVC in the cluster.",
+#     "assignableScopes": [
+#         "/subscriptions/f7137354-a978-47b6-8463-a82940478c01"
+#     ],
+#     "permissions": [
+#         {
+#             "actions": [
+#                 "Microsoft.Storage/storageAccounts/fileServices/read",
+#                 "Microsoft.Storage/storageAccounts/fileServices/write",
+#                 "Microsoft.Storage/storageAccounts/fileServices/shares/read",
+#                 "Microsoft.Storage/storageAccounts/fileServices/shares/write"
+#             ],
+#             "notActions": [],
+#             "dataActions": [
+#                 "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/read",
+#                 "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/write",
+#                 "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/delete",
+#                 "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/modifypermissions/action"
+#             ],
+#             "notDataActions": []
+#         }
+#     ]
+# }
+# EOF
+
+# az role definition create --role-definition file-storage-role-definition.json
+
+
+
+cat << EOF > ./monitoring-role-definition.json
 {
-    "name": "Azure Kubernetes StorageClass Manage Files",
-    "description": "Create File PV/PVC in the cluster.",
+    "name": "Monitoring Roles for Azure Managed Grafana & Prometheus",
+    "description": "Monitoring Roles for Azure Managed Grafana & Prometheus",
     "assignableScopes": [
         "/subscriptions/f7137354-a978-47b6-8463-a82940478c01"
     ],
     "permissions": [
         {
             "actions": [
-                "Microsoft.Storage/storageAccounts/fileServices/read",
-                "Microsoft.Storage/storageAccounts/fileServices/write",
-                "Microsoft.Storage/storageAccounts/fileServices/shares/read",
-                "Microsoft.Storage/storageAccounts/fileServices/shares/write"
+                "Microsoft.Insights/Metricnamespaces/Read"
             ],
             "notActions": [],
-            "dataActions": [
-                "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/read",
-                "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/write",
-                "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/delete",
-                "Microsoft.Storage/storageAccounts/fileServices/fileshares/files/modifypermissions/action"
-            ],
+            "dataActions": [],
             "notDataActions": []
         }
     ]
 }
 EOF
 
-az role definition create --role-definition file-storage-role-definition.json
+az role definition create --role-definition monitoring-role-definition.json
 
-az role definition delete \
-  --name "Azure Kubernetes StorageClass Manage Blob Storage"
 
-az role definition delete \
-  --name "Azure Kubernetes StorageClass Manage Files"
+az aks show \
+    --resource-group "rg-corus" \
+    --name "aks-corus-prd"
+
+
+RG_OBJECT_ID=$(az group show \
+    --name "rg-corus" \
+    --query id -o tsv)
+echo $RG_OBJECT_ID
+
+GRAFANA_OBJECT_ID=$(az grafana show \
+    --resource-group "rg-corus" \
+    --name "grafana-aks-corus-prd" \
+    --query identity.principalId -o tsv)
+echo $GRAFANA_OBJECT_ID
+
+az role assignment create \
+  --role "Monitoring Roles for Azure Managed Grafana & Prometheus" \
+  --assignee-object-id $GRAFANA_OBJECT_ID \
+  --assignee-principal-type "ServicePrincipal" \
+  --scope $RG_OBJECT_ID
+
+
+SUBSCRIPTION_ID="$(az account subscription list \
+--query "[?displayName=='skccai-quickdraw'].id" -o tsv)"
+echo $SUBSCRIPTION_ID
+
+az role assignment create \
+  --role "Monitoring Roles for Azure Managed Grafana & Prometheus" \
+  --assignee-object-id $GRAFANA_OBJECT_ID \
+  --assignee-principal-type "ServicePrincipal" \
+  --scope $SUBSCRIPTION_ID
+
+#/providers/microsoft.insights
+
+
+# az role definition delete \
+#   --name "Azure Kubernetes StorageClass Manage Blob Storage"
+
+# az role definition delete \
+#   --name "Azure Kubernetes StorageClass Manage Files"
 
 az role definition list \
   --name "Azure Kubernetes StorageClass Manage Files"
@@ -907,11 +968,19 @@ SC_FILE_ID=$(az storage account file-service-properties show \
 
 SC_FILE_SHARE_ID="${SC_FILE_ID}/shares"
 
+# If system-assigned identity:
 AKS_OBJECT_ID=$(az aks show \
     --resource-group "rg-corus" \
-    --name "aks-codev-prd" \
+    --name "aks-corus-prd" \
     --query identity.principalId -o tsv)
+
+# or, user-assigned identity:
+AKS_OBJECT_ID=$(az aks show \
+    --resource-group "rg-corus" \
+    --name "aks-corus-prd" \
+    --query identity.userAssignedIdentities.principalId -o tsv)
 echo $AKS_OBJECT_ID
+
 
 
 az role assignment create \
@@ -1347,7 +1416,7 @@ Get-AzureADUser -All $true | Set-AzureADUser -PasswordPolicies None
 
 ```bash
 az aks update \
-  --name aks-codev-prd \
+  --name aks-corus-prd \
   --resource-group rg-corus \
   --enable-azure-keyvault-kms \
   --azure-keyvault-kms-key-id $KEY_ID \
@@ -1464,7 +1533,7 @@ IDENTITY_OBJECT_ID=$(az identity show \
 echo $IDENTITY_OBJECT_ID
 
 az aks update \
-  --name aks-codev-prd \
+  --name aks-corus-prd \
   --resource-group rg-corus \
   --enable-azure-keyvault-kms \
   --azure-keyvault-kms-key-vault-network-access "Private" \
@@ -1494,7 +1563,7 @@ az network vnet subnet list \
 
 
 az aks update \
-  -n aks-codev-prd \
+  -n aks-corus-prd \
   -g rg-corus \
   --enable-apiserver-vnet-integration \
   --apiserver-subnet-id /subscriptions/f7137354-a978-47b6-8463-a82940478c01/resourceGroups/rg-corus/providers/Microsoft.Network/virtualNetworks/vnet-corus-prd/subnets/subnet-aks-app

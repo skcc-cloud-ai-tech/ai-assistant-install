@@ -57,11 +57,12 @@ helm pull istio/gateway \
 #     -n istio-system \
 #   -f values-gateway.yaml \
 #   --wait
-# helm upgrade --install istio-gateway \
-#     ./gateway \
-#     -n istio-system \
-#   -f values-gateway-aks-internal.yaml \
-#   --wait
+helm upgrade --install istio-gateway \
+    ./gateway \
+    -n istio-system \
+  -f values-gateway-aks-internal.yaml \
+  --wait
+
 helm upgrade --install istio-gateway \
     ./gateway \
     -n istio-system \

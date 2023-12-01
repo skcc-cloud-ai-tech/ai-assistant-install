@@ -1,0 +1,17 @@
+{
+    "name": "Monitoring Roles for Azure Managed Grafana & Prometheus",
+    "description": "Monitoring Roles for Azure Managed Grafana & Prometheus",
+    "assignableScopes": [
+        "/subscriptions/f7137354-a978-47b6-8463-a82940478c01"
+    ],
+    "permissions": [
+        {
+            "actions": [
+                "Microsoft.Insights/Metricnamespaces/Read"
+            ],
+            "notActions": [],
+            "dataActions": [],
+            "notDataActions": []
+        }
+    ]
+}

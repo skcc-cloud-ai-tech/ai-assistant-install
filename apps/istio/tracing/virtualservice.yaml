@@ -38,21 +38,33 @@ spec:
         port:
           number: 80
         host: tracing.istio-system.svc.cluster.local
+  # - match:
+  #   # - headers:
+  #   #     cookie:
+  #   #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+  #   - uri:
+  #       prefix: /monitoring/zipkin/
+  #   - uri:
+  #       prefix: /monitoring/zipkin
+  #   rewrite:
+  #     uri: "/"
+  #   route:
+  #   - destination:
+  #       port:
+  #         number: 9411
+  #       host: zipkin.istio-system.svc.cluster.local
   - match:
-    # - headers:
-    #     cookie:
-    #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
     - uri:
-        prefix: /monitoring/zipkin/
+        prefix: /monitoring/kiali/
     - uri:
-        prefix: /monitoring/zipkin
+        prefix: /monitoring/kiali
     rewrite:
       uri: "/"
     route:
     - destination:
         port:
-          number: 9411
-        host: zipkin.istio-system.svc.cluster.local
+          number: 20001
+        host: kiali.istio-system.svc.cluster.local
   - match:
     - uri:
         prefix: /monitoring/logs/

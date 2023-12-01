@@ -16,10 +16,9 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  # storageClass: ""
-  storageClass: "azureblob-fuse-premium"
+  storageClass: ""
   redis:
-    password: "Quickdraw!"
+    password: ""
 
 ## @section Common parameters
 ##
@@ -353,11 +352,7 @@ master:
   ## @param master.nodeSelector Node labels for Redis&reg; master pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  # nodeSelector: {}
-  nodeSelector:
-    kubernetes.io/os: linux
-    nodetype: worker
-    # spot: "false"
+  nodeSelector: {}
   ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -446,14 +441,14 @@ master:
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
     ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
     ##
-    # storageClass: ""
+    storageClass: ""
     ## @param master.persistence.accessModes Persistent Volume access modes
     ##
     accessModes:
       - ReadWriteOnce
     ## @param master.persistence.size Persistent Volume size
     ##
-    size: 500Gi  # 8Gi
+    size: 8Gi
     ## @param master.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
@@ -774,11 +769,7 @@ replica:
   ## @param replica.nodeSelector Node labels for Redis&reg; replicas pods assignment
   ## ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
-  # nodeSelector: {}
-  nodeSelector:
-    kubernetes.io/os: linux
-    nodetype: worker
-    # spot: "false"
+  nodeSelector: {}
   ## @param replica.tolerations Tolerations for Redis&reg; replicas pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -874,7 +865,7 @@ replica:
       - ReadWriteOnce
     ## @param replica.persistence.size Persistent Volume size
     ##
-    size: 100Gi  # 8Gi
+    size: 8Gi
     ## @param replica.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
@@ -1033,7 +1024,7 @@ sentinel:
   annotations: {}
   ## @param sentinel.masterSet Master set name
   ##
-  masterSet: redis-master
+  masterSet: mymaster
   ## @param sentinel.quorum Sentinel Quorum
   ##
   quorum: 2
@@ -1168,7 +1159,7 @@ sentinel:
       - ReadWriteOnce
     ## @param sentinel.persistence.size Persistent Volume size
     ##
-    size: 1Gi  # 100Mi
+    size: 100Mi
     ## @param sentinel.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}

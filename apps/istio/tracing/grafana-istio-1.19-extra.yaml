@@ -206,9 +206,9 @@ spec:
             - name: "GF_AUTH_BASIC_ENABLED"
               value: "false"
             - name: "GF_SECURITY_ADMIN_PASSWORD"
-              value: "admin"
+              value: "Quickdraw!"
             - name: "GF_SECURITY_ADMIN_USER"
-              value: "admin"
+              value: "grafana_admin"
           livenessProbe:
             failureThreshold: 10
             httpGet:
