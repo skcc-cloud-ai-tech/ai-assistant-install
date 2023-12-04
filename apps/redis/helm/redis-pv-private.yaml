@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-master
+  labels:
+    app: redis
+    app/group: corus
+    app/profile: default
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: codev-nfs-storageclass
+  claimRef:
+    namespace: redis
+    name: redis-master
+  nfs:
+    server: 10.250.107.189
+    path: /mnt/shared/redis/master
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-replicas
+  labels:
+    app: redis
+    app/group: corus
+    app/profile: default
+spec:
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: codev-nfs-storageclass
+  claimRef:
+    namespace: redis
+    name: redis-replicas
+  nfs:
+    server: 10.250.107.189
+    path: /mnt/shared/redis/replicas

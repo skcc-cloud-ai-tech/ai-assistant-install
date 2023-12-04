@@ -17,7 +17,7 @@ global:
   ##
   imagePullSecrets: []
   # storageClass: ""
-  storageClass: "azureblob-fuse-premium"
+  storageClass: "codev-nfs-storageclass"
   redis:
     password: "Quickdraw!"
 
@@ -357,6 +357,7 @@ master:
   nodeSelector:
     kubernetes.io/os: linux
     nodetype: worker
+    devicetype: cpu
     # spot: "false"
   ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -473,7 +474,7 @@ master:
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
-    existingClaim: ""
+    existingClaim: "redis-master"
   ## Redis&reg; master service parameters
   ##
   service:
@@ -564,7 +565,7 @@ master:
 replica:
   ## @param replica.replicaCount Number of Redis&reg; replicas to deploy
   ##
-  replicaCount: 3
+  replicaCount: 2
   ## @param replica.configuration Configuration for Redis&reg; replicas nodes
   ## ref: https://redis.io/topics/config
   ##
@@ -778,6 +779,7 @@ replica:
   nodeSelector:
     kubernetes.io/os: linux
     nodetype: worker
+    devicetype: cpu
     # spot: "false"
   ## @param replica.tolerations Tolerations for Redis&reg; replicas pods assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -894,7 +896,7 @@ replica:
     ## @param replica.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires replica.persistence.enabled: true
     ##
-    existingClaim: ""
+    existingClaim: "redis-replicas"
   ## Redis&reg; replicas service parameters
   ##
   service:

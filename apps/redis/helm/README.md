@@ -22,6 +22,14 @@ helm upgrade --install redis \
   -n redis \
   --create-namespace \
   -f values-redis.yaml
+
+kubectl apply -f redis-pv-private.yaml && \
+kubectl apply -f redis-pvc-private.yaml && \
+helm upgrade --install redis \
+  ./redis \
+  -n redis \
+  --create-namespace \
+  -f values-redis-private.yaml
 ```
 
 ```bash

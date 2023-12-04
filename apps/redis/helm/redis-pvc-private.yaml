@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-master
+  namespace: redis
+  labels:
+    app: redis
+    app/group: corus
+    app/profile: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "codev-nfs-storageclass"
+  volumeMode: Filesystem
+  volumeName: redis-master
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-replicas
+  namespace: redis
+  labels:
+    app: redis
+    app/group: corus
+    app/profile: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "codev-nfs-storageclass"
+  volumeMode: Filesystem
+  volumeName: redis-replicas
+  resources:
+    requests:
+      storage: 30Gi
