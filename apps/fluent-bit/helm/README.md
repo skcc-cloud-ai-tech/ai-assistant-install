@@ -15,10 +15,17 @@ NAMESPACE="logging"
 kubectl create namespace ${NAMESPACE}
 
 # Create a secret to access Open Distro for OPENSEARCH: USERNAME & PASSWORD
-kubectl create secret generic es-cred \
+# kubectl create secret generic es-cred \
+#   -n ${NAMESPACE} \
+#   --from-literal=OPENSEARCH_USERNAME='xxx' \
+#   --from-literal=OPENSEARCH_PASSWORD='xxx'
+
+kubectl create secret generic opensearch-cred \
   -n ${NAMESPACE} \
-  --from-literal=OPENSEARCH_USERNAME='xxx' \
-  --from-literal=OPENSEARCH_PASSWORD='xxx'
+  --from-literal=username='xxx' \
+  --from-literal=password='xxx'
+
+
 
 
 helm upgrade --install fluent-bit \

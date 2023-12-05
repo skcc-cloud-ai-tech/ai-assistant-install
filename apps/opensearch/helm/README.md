@@ -5,6 +5,20 @@ See: https://github.com/opensearch-project/helm-charts
 
 ## Pre-requisite
 
+`/etc/sysctl.conf`:
+
+```bash
+vm.max_map_count = 262144
+```
+
+PV/PVC
+```bash
+kubectl create namespace opensearch
+
+kubectl apply -f volumes/nfs-pv.yaml
+kubectl apply -f volumes/nfs-pvc.yaml
+```
+
 ## Install
 
 ```bash
@@ -58,6 +72,23 @@ helm upgrade --install opensearch-dashboards \
   --create-namespace \
   -f values-opensearch-dashboards-http.yaml
 ```
+
+* private:
+
+```bash
+helm upgrade --install opensearch \
+  ./opensearch \
+  -n opensearch \
+  --create-namespace \
+  -f values-opensearch-http-private.yaml
+
+helm upgrade --install opensearch-dashboards \
+  ./opensearch-dashboards \
+  -n opensearch \
+  --create-namespace \
+  -f values-opensearch-dashboards-http-private.yaml
+```
+
 
 * `TLS`
 

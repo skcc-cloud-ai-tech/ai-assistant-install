@@ -186,7 +186,11 @@ master:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   ##
-  extraFlags: []
+  # extraFlags: []
+  extraFlags:
+    - "--maxmemory 2048mb"
+    - "--maxmemory-policy volatile-lru"
+    # - "--repl-backlog-size 1024mb"
   ## @param master.extraEnvVars Array with extra environment variables to add to Redis&reg; master nodes
   ## e.g:
   ## extraEnvVars:
@@ -264,7 +268,9 @@ master:
   ##
   resources:
     limits: {}
-    requests: {}
+    # requests: {}
+    requests:
+      memory: 3072Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled Redis&reg; master pods' Security Context
@@ -454,7 +460,7 @@ master:
       - ReadWriteMany
     ## @param master.persistence.size Persistent Volume size
     ##
-    size: 500Gi  # 8Gi
+    size: 10Gi  # 8Gi
     ## @param master.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
@@ -592,7 +598,12 @@ replica:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   ##
-  extraFlags: []
+  # extraFlags: []
+  extraFlags:
+    - "--maxmemory 1024mb"
+    - "--maxmemory-policy volatile-lru"
+    - "--repl-backlog-size 1024mb"
+  
   ## @param replica.extraEnvVars Array with extra environment variables to add to Redis&reg; replicas nodes
   ## e.g:
   ## extraEnvVars:
@@ -684,9 +695,11 @@ replica:
     limits: {}
     #   cpu: 250m
     #   memory: 256Mi
-    requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+    # requests: {}
+    # #   cpu: 250m
+    # #   memory: 256Mi
+    requests:
+      memory: 2048Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.podSecurityContext.enabled Enabled Redis&reg; replicas pods' Security Context
@@ -876,7 +889,7 @@ replica:
       - ReadWriteMany
     ## @param replica.persistence.size Persistent Volume size
     ##
-    size: 100Gi  # 8Gi
+    size: 8Gi  # 8Gi
     ## @param replica.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
@@ -1200,7 +1213,9 @@ sentinel:
   ##
   resources:
     limits: {}
-    requests: {}
+    # requests: {}
+    requests:
+      memory: 1024Mi
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&reg; Sentinel containers' Security Context
