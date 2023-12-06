@@ -5,10 +5,10 @@ See: https://github.com/opensearch-project/helm-charts
 
 ## Pre-requisite
 
-`/etc/sysctl.conf`:
+for each nodes:
 
 ```bash
-vm.max_map_count = 262144
+sudo bash -c 'echo "vm.max_map_count = 262144" >> /etc/sysctl.conf' && sudo sysctl -p
 ```
 
 PV/PVC
@@ -46,7 +46,7 @@ helm pull opensearch/opensearch-dashboards \
 
 ```bash
 helm upgrade --install opensearch \
-  ./opensearch \
+  ./opensearch-fsgroup \
   -n opensearch \
   --create-namespace \
   -f values-opensearch.yaml
@@ -61,7 +61,7 @@ helm upgrade --install opensearch-dashboards \
 ```bash
 
 helm upgrade --install opensearch \
-  ./opensearch \
+  ./opensearch-fsgroup \
   -n opensearch \
   --create-namespace \
   -f values-opensearch-http.yaml

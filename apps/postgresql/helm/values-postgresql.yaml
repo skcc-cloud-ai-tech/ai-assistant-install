@@ -35,7 +35,7 @@ global:
     password: "Quickdraw!"
     database: "corus_backend"
     repmgrUsername: "repmgr"
-    repmgrPassword: ""
+    repmgrPassword: "repmgr"
     repmgrDatabase: "repmgr"
     existingSecret: ""
   ldap:
@@ -43,7 +43,7 @@ global:
     existingSecret: ""
   pgpool:
     adminUsername: "pgpooladm"
-    adminPassword: ""
+    adminPassword: "pgpooladm"
     existingSecret: ""
 
 ## @section Common parameters
@@ -430,7 +430,7 @@ postgresql:
   ## @param postgresql.repmgrChildNodesDisconnectTimeout Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)
   ##
   repmgrUsername: repmgr
-  repmgrPassword: ""
+  repmgrPassword: "repmgr"
   repmgrDatabase: repmgr
   repmgrLogLevel: NOTICE
   repmgrConnectTimeout: 5
@@ -1335,8 +1335,8 @@ pgpool:
   ## @param pgpool.adminUsername Pgpool Admin username
   ## @param pgpool.adminPassword Pgpool Admin password
   ##
-  adminUsername: admin
-  adminPassword: ""
+  adminUsername: pgpooladm
+  adminPassword: "pgpooladm"
   ## @param pgpool.usePasswordFile Set to `true` to mount pgpool secret as a file instead of passing environment variable
   ##
   usePasswordFile: ""
@@ -1916,7 +1916,7 @@ persistence:
 persistentVolumeClaimRetentionPolicy:
   ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for postgresql Statefulset
   ##
-  enabled: false
+  enabled: true
   ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
   ##
   whenScaled: Retain

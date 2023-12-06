@@ -1,4 +1,3 @@
-kubectl apply -f - <<EOF
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -17,9 +16,9 @@ spec:
     #     cookie:
     #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
     - uri:
-        prefix: /api/opensearch/engine/
+        prefix: /monitoring/opensearch/engine/
     - uri:
-        prefix: /api/opensearch/engine
+        prefix: /monitoring/opensearch/engine
     rewrite:
       uri: "/"
     route:
@@ -32,9 +31,9 @@ spec:
     #     cookie:
     #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
     - uri:
-        prefix: /api/opensearch/dashboard/
+        prefix: /monitoring/opensearch/dashboard/
     - uri:
-        prefix: /api/opensearch/dashboard
+        prefix: /monitoring/opensearch/dashboard
     # rewrite:
     #   uri: "/"
     route:
@@ -42,4 +41,3 @@ spec:
         port:
           number: 5601
         host: opensearch-dashboards.opensearch.svc.cluster.local
-EOF

@@ -31,8 +31,8 @@ spec:
         prefix: /monitoring/trace/
     - uri:
         prefix: /monitoring/trace
-    rewrite:
-      uri: "/"
+    # rewrite:
+    #   uri: "/"
     route:
     - destination:
         port:
@@ -58,8 +58,8 @@ spec:
         prefix: /monitoring/kiali/
     - uri:
         prefix: /monitoring/kiali
-    rewrite:
-      uri: "/"
+    # rewrite:
+    #   uri: "/"
     route:
     - destination:
         port:

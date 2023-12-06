@@ -159,6 +159,7 @@ spec:
       - name: config
         configMap:
           name: {{ template "opensearch.uname" . }}-config
+          defaultMode: 384  # 0600
       {{- end }}
       {{- if and .Values.securityConfig.config.data .Values.securityConfig.config.securityConfigSecret }}
       {{ fail "Only one of .Values.securityConfig.config.data and .Values.securityConfig.config.securityConfigSecret may be defined. Please see the comment in values.yaml describing usage." }}
@@ -320,7 +321,7 @@ spec:
       - name: "{{ template "opensearch.name" . }}"
         securityContext:
 {{ toYaml .Values.securityContext | indent 10 }}
-      {{- if .Values.plugins.enabled }}
+
         command:
         - sh
         - -c
@@ -328,12 +329,31 @@ spec:
           #!/usr/bin/env bash
           set -euo pipefail
 
+          #chown -R opensearch:opensearch {{ .Values.opensearchHome }}/config
+          chmod 0700 {{ .Values.opensearchHome }}/config
+
+          {{- if .Values.plugins.enabled }}
           {{- range $plugin := .Values.plugins.installList }}
           ./bin/opensearch-plugin install -b {{ $plugin }}
           {{- end }}
+          {{- end }}
 
           bash opensearch-docker-entrypoint.sh
-      {{- end }}
+
+      # {{- if .Values.plugins.enabled }}
+      #   command:
+      #   - sh
+      #   - -c
+      #   - |
+      #     #!/usr/bin/env bash
+      #     set -euo pipefail
+
+      #     {{- range $plugin := .Values.plugins.installList }}
+      #     ./bin/opensearch-plugin install -b {{ $plugin }}
+      #     {{- end }}
+
+      #     bash opensearch-docker-entrypoint.sh
+      # {{- end }}
 
         image: "{{ template "opensearch.dockerRegistry" . }}{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"

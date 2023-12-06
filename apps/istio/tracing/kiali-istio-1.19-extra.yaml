@@ -120,7 +120,7 @@ data:
       metrics_port: 9090
       port: 20001
       web_schema: http
-      web_root: /monitoring/tracing/kiali
+      web_root: /monitoring/kiali
 ...
 ---
 # Source: kiali-server/templates/role-viewer.yaml
@@ -493,14 +493,14 @@ spec:
           containerPort: 9090
         readinessProbe:
           httpGet:
-            path: /monitoring/tracing/kiali/healthz
+            path: /monitoring/kiali/healthz
             port: api-port
             scheme: HTTP
           initialDelaySeconds: 5
           periodSeconds: 30
         livenessProbe:
           httpGet:
-            path: /monitoring/tracing/kiali/healthz
+            path: /monitoring/kiali/healthz
             port: api-port
             scheme: HTTP
           initialDelaySeconds: 5

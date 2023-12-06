@@ -1,0 +1,240 @@
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vs-corus-apps
+  namespace: corus
+  labels:
+    app: corus-backend
+    app/group: corus
+    app/profile: default
+spec:
+  hosts:
+    - "*"
+    # - "corus-backend.corus.svc.cluster.local"
+    # - "app.quickdrawai.net"
+    # - "app.corus-ai.net"
+  gateways:
+    - istio-system/istio-corus-gateway
+    # - mesh # applies to all the sidecars in the mesh
+  http:
+    - match:
+        - uri:
+            prefix: /api/corus/backend/
+          withoutHeaders:
+            x-request-debug-id: {}
+            x-request-profile: {}
+        - uri:
+            prefix: /api/corus/backend
+          withoutHeaders:
+            x-request-debug-id: {}
+            x-request-profile: {}
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            port:
+              number: 8000
+            host: corus-backend.corus.svc.cluster.local
+    - match:
+        - uri:
+            prefix: /api/corus/backend/
+          headers:
+            x-request-debug-id:
+              regex: '.*'
+            x-request-profile:
+              exact: 'debug'
+        - uri:
+            prefix: /api/corus/backend
+          headers:
+            x-request-debug-id:
+              regex: '.*'
+            x-request-profile:
+              exact: 'debug'
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            port:
+              number: 8000
+            host: corus-backend-debug.corus.svc.cluster.local
+    - match:
+        - uri:
+            prefix: /dashboard/
+          withoutHeaders:
+            x-request-debug-id: {}
+            x-request-profile: {}
+        - uri:
+            prefix: /dashboard
+          withoutHeaders:
+            x-request-debug-id: {}
+            x-request-profile: {}
+      rewrite:
+        uri: "/dashboard/"
+      route:
+        - destination:
+            port:
+              number: 8000
+            host: corus-backend.corus.svc.cluster.local
+    - match:
+        - uri:
+            prefix: /dashboard/
+          headers:
+            x-request-debug-id:
+              regex: '.*'
+            x-request-profile:
+              exact: 'debug'
+        - uri:
+            prefix: /dashboard
+          headers:
+            x-request-debug-id:
+              regex: '.*'
+            x-request-profile:
+              exact: 'debug'
+      rewrite:
+        uri: "/dashboard/"
+      route:
+        - destination:
+            port:
+              number: 8000
+            host: corus-backend-debug.corus.svc.cluster.local
+    - match:
+        - uri:
+            prefix: /static
+          # 2023-10-19 : static 경로 인지 불가로 해당 부분 임시 주석처리함. 
+          # headers:
+            # x-request-debug-id: {}
+            # x-request-profile: {}
+      rewrite:
+        uri: /static/
+      route:
+        - destination:
+            host: corus-backend.corus.svc.cluster.local
+            port:
+              number: 8000
+    - match:
+        - uri:
+            prefix: /static
+          headers:
+            x-request-debug-id:
+              regex: '.*'
+            x-request-profile:
+              exact: 'debug'
+      rewrite:
+        uri: /static/
+      route:
+        - destination:
+            host: corus-backend-debug.corus.svc.cluster.local
+            port:
+              number: 8000
+# --------------------------------------------------------------
+    - match:
+      # - headers:
+      #     cookie:
+      #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+      - uri:
+          prefix: /monitoring/opensearch/engine/
+      - uri:
+          prefix: /monitoring/opensearch/engine
+      rewrite:
+        uri: "/"
+      route:
+      - destination:
+          port:
+            number: 9200
+          host: opensearch-cluster-master-headless.opensearch.svc.cluster.local
+    - match:
+      - uri:
+          prefix: /monitoring/logs/
+      - uri:
+          prefix: /monitoring/logs
+      # rewrite:
+      #   uri: "/"
+      route:
+      - destination:
+          port:
+            number: 5601
+          host: opensearch-dashboards.opensearch.svc.cluster.local
+    - match:
+      - uri:
+          prefix: /monitoring/grafana/
+      - uri:
+          prefix: /monitoring/grafana
+      # rewrite:
+      #   uri: "/"
+      route:
+      - destination:
+          port:
+            number: 3000
+          host: grafana.istio-system.svc.cluster.local
+    - match:
+      # - headers:
+      #     cookie:
+      #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+      - uri:
+          prefix: /monitoring/trace/
+      - uri:
+          prefix: /monitoring/trace
+      # rewrite:
+      #   uri: "/"
+      route:
+      - destination:
+          port:
+            number: 80
+          host: tracing.istio-system.svc.cluster.local
+    # - match:
+    #   # - headers:
+    #   #     cookie:
+    #   #       regex: "^(.*?;)?(user=dev-123)(;.*)?"
+    #   - uri:
+    #       prefix: /monitoring/zipkin/
+    #   - uri:
+    #       prefix: /monitoring/zipkin
+    #   rewrite:
+    #     uri: "/"
+    #   route:
+    #   - destination:
+    #       port:
+    #         number: 9411
+    #       host: zipkin.istio-system.svc.cluster.local
+    - match:
+      - uri:
+          prefix: /monitoring/kiali/
+      - uri:
+          prefix: /monitoring/kiali
+      # rewrite:
+      #   uri: "/"
+      route:
+      - destination:
+          port:
+            number: 20001
+          host: kiali.istio-system.svc.cluster.local
+# --------------------------------------------------------------
+    - match:
+      - uri:
+          prefix: /
+        withoutHeaders:
+          x-request-debug-id: {}
+          x-request-profile: {}
+      rewrite:
+        uri: "/"
+      route:
+      - destination:
+          port:
+            number: 3000
+          host: corus-frontend.corus.svc.cluster.local
+    - match:
+      - uri:
+          prefix: /
+        headers:
+          x-request-debug-id:
+            regex: '.*'
+          x-request-profile:
+            exact: 'debug'
+      rewrite:
+        uri: "/"
+      route:
+      - destination:
+          port:
+            number: 3000
+          host: corus-frontend-debug.corus.svc.cluster.local
