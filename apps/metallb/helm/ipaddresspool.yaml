@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: lb-address-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - '10.250.107.189/32'
+  - '10.250.107.191-10.250.107.194'
