@@ -35,7 +35,8 @@ nodes:
   extraPortMappings:
   - containerPort: 30000
     hostPort: 80
-    listenAddress: "127.0.0.1"
+    listenAddress: "0.0.0.0"
+    # listenAddress: "127.0.0.1"
     protocol: TCP
   extraMounts:
     - hostPath: $HOST_VOLUME
@@ -45,7 +46,7 @@ nodes:
 # - role: worker
 EOF
 
-
+docker update --cpus=14 -m 28g --memory-swap -1 local-control-plane
 kubectl label --overwrite nodes `kubectl get no -o jsonpath='{.items[0].metadata.name}'` nodetype=worker devicetype=cpu
 
 
@@ -91,6 +92,12 @@ helm upgrade --install systemdb \
   --set readReplicas.persistence.enabled=false \
   --wait
 
+REDIS_PASSWORD="Quickdraw!"
+helm upgrade --install redis \
+  oci://registry-1.docker.io/bitnamicharts/redis \
+  -n corus \
+  --set global.redis.password=$REDIS_PASSWORD \
+  --set replica.replicaCount=0
 
 kubectl create secret docker-registry acr-cred \
     --namespace corus \
@@ -105,8 +112,6 @@ kubectl create secret generic acr-cred-generic \
 
 az aks get-credentials --resource-group rg-quickdrawai --name aks-corus
 LLM_SECRET="$(kubectl -n corus get secrets llm-endpoint-cred -o yaml)"
-
-
 kubectl config use-context kind-local
 
 echo "$LLM_SECRET" | kubectl apply -f -
@@ -122,12 +127,30 @@ kubectl create secret generic opensearch-cred \
   --from-literal=username="$OPENSEARCH_USERNAME" \
   --from-literal=password="$OPENSEARCH_PASSWORD"
 
+kubectl create secret generic es-cred \
+  -n corus \
+  --from-literal=username="$OPENSEARCH_USERNAME" \
+  --from-literal=password="$OPENSEARCH_PASSWORD"
+
 
 kubectl apply -f resources/serviceaccount.yaml
 kubectl apply -f resources/systemdb-service.yaml
-kubectl apply -f resources/es-service.yaml
+# kubectl apply -f resources/es-service.yaml
 kubectl apply -f resources/gateway.yaml
 # kubectl apply -f llm-api-key-secret-example.yaml
 
 kubectl apply -f resources/corus-pv.yaml
 kubectl apply -f resources/corus-pvc.yaml
+
+# =========================================================
+
+cd ~/git/ai-assistant-backend/k8s
+kubectl apply -f local/backend/service.yaml
+# kubectl apply -f local/backend/py-profiles.yaml
+kubectl apply -f dev/backend/py-profiles.yaml
+kubectl apply -f local/backend/service.yaml
+# kubectl apply -f local/backend/deployment.yaml
+kubectl apply -f local/backend/deployment.yaml
+kubectl apply -f local/frontend
+
+kubectl apply -f dev/backend/virtualservice.yaml

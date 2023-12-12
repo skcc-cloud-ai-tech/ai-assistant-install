@@ -9,4 +9,5 @@ spec:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: "/data/kind_host_volume"
+    path: /volume
+    # path: "/data/kind_host_volume"
