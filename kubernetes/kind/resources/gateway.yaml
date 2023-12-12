@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: istio-corus-gateway
+  namespace: istio-system
+spec:
+  selector:
+    # app: istio-gateway
+    istio: gateway
+  servers:
+  - hosts:
+    - '*'
+    - app.stg.corus-ai.net
+    port:
+      number: 80
+      name: http
+      protocol: HTTP
+  # - port:
+  #     number: 443
+  #     name: https
+  #     protocol: HTTPS
+  #   tls:
+  #     mode: SIMPLE
+  #     serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+  #     privateKey: /etc/istio/ingressgateway-certs/tls.key
+  #   hosts:
+  #   - dev.api.storefront-demo.com
+  #   - test.api.storefront-demo.com
+  #   - uat.api.storefront-demo.com
+---
