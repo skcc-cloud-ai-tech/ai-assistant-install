@@ -189,8 +189,8 @@ master:
   
   # extraFlags: []
   extraFlags:
-    - "--maxmemory 2048mb"
-    - "--maxmemory-policy volatile-lru"
+    - "--maxmemory 1024mb"
+    - "--maxmemory-policy allkeys-lru"
     # - "--repl-backlog-size 1024mb"
   ## @param master.extraEnvVars Array with extra environment variables to add to Redis&reg; master nodes
   ## e.g:
@@ -268,8 +268,14 @@ master:
   ## @param master.resources.requests The requested resources for the Redis&reg; master containers
   ##
   resources:
-    limits: {}
-    requests: {}
+    # limits: {}
+    # requests: {}
+    limits:
+      cpu: 500m
+      memory: 3072Mi
+    requests:
+      cpu: 500m
+      memory: 3072Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled Redis&reg; master pods' Security Context
@@ -600,8 +606,8 @@ replica:
   # extraFlags: []
   extraFlags:
     - "--maxmemory 1024mb"
-    - "--maxmemory-policy volatile-lru"
-    - "--repl-backlog-size 1024mb"
+    - "--maxmemory-policy allkeys-lru"
+    # - "--# repl-backlog-size 10mb"
   
   ## @param replica.extraEnvVars Array with extra environment variables to add to Redis&reg; replicas nodes
   ## e.g:
@@ -691,14 +697,18 @@ replica:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
+    # limits: {}
     #   cpu: 250m
     #   memory: 256Mi
     # requests: {}
     # #   cpu: 250m
     # #   memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 3072Mi
     requests:
-      memory: 2048Mi
+      cpu: 500m
+      memory: 3072Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.podSecurityContext.enabled Enabled Redis&reg; replicas pods' Security Context
@@ -1211,10 +1221,14 @@ sentinel:
   ## @param sentinel.resources.requests The requested resources for the Redis&reg; Sentinel containers
   ##
   resources:
-    limits: {}
+    # limits: {}
     # requests: {}
+    limits:
+      cpu: 500m
+      memory: 3072Mi
     requests:
-      memory: 1024Mi
+      cpu: 500m
+      memory: 3072Mi
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&reg; Sentinel containers' Security Context
@@ -1572,8 +1586,14 @@ metrics:
   ## @param metrics.resources.requests The requested resources for the Redis&reg; exporter container
   ##
   resources:
-    limits: {}
-    requests: {}
+    # limits: {}
+    # requests: {}
+    limits:
+      cpu: 500m
+      memory: 3072Mi
+    requests:
+      cpu: 500m
+      memory: 3072Mi
   ## @param metrics.podLabels Extra labels for Redis&reg; exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##

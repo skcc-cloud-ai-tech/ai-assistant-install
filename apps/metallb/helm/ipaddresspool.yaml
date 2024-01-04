@@ -4,6 +4,40 @@ metadata:
   name: lb-address-pool
   namespace: metallb-system
 spec:
+  autoAssign: true
+  avoidBuggyIPs: true
+  # avoidBuggyIPs: false
+  # protocol: layer2
   addresses:
-  - '10.250.107.189/32'
+  - '10.250.107.189/32'  # data1
   - '10.250.107.191-10.250.107.194'
+  # - '10.250.107.191/32'  # mini0
+  # - '10.250.107.192/32'  # gpu0
+  # - '10.250.107.193/32'  # data0
+  # - '10.250.107.194/32'  # gpu1
+---
+# apiVersion: metallb.io/v1beta1
+# kind: L2Advertisement
+# metadata:
+#   name: l2-address
+#   namespace: metallb-system
+# spec:
+#   ipAddressPools:
+#   - lb-address-pool
+  # nodeSelectors:
+  # - matchLabels:
+  #     kubernetes.io/hostname: NodeA
+  # - matchLabels:
+  #     kubernetes.io/hostname: NodeB
+# ---
+# apiVersion: projectcalico.org/v3
+# kind: BGPConfiguration
+# metadata:
+#   name: default
+# spec:
+#   logSeverityScreen: Info
+#   # nodeToNodeMeshEnabled: false
+#   serviceClusterIPs:
+#   - cidr: 192.168.0.0/16
+#   serviceLoadBalancerIPs:
+#   - cidr: 10.250.107.189/32

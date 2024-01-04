@@ -193,7 +193,8 @@ prometheus:
 controller:
   enabled: true
   # -- Controller log level. Must be one of: `all`, `debug`, `info`, `warn`, `error` or `none`
-  logLevel: info
+  # logLevel: info
+  logLevel: debug
   # command: /controller
   # webhookMode: enabled
   image:
@@ -252,10 +253,12 @@ controller:
 # speaker contains configuration specific to the MetalLB speaker
 # daemonset.
 speaker:
-  enabled: true
+  # enabled: true
+  enabled: false
   # command: /speaker
   # -- Speaker log level. Must be one of: `all`, `debug`, `info`, `warn`, `error` or `none`
-  logLevel: info
+  # logLevel: info
+  logLevel: debug
   tolerateMaster: true
   memberlist:
     enabled: true

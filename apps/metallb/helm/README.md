@@ -45,8 +45,32 @@ helm upgrade --install metallb \
   -n metallb-system \
   --create-namespace \
   -f values-metallb.yaml
+kubectl apply -f ipaddresspool.yaml
+
+helm uninstall metallb -n metallb-system
+```
+
+<!-- After a while, delete `daemonset/metallb-speaker` -->
+
+```bash
+sudo systemctl restart kubelet
+```
+
+
+```bash
+kubectl -n istio-system get svc istio-gateway
+```
+
+```yaml
+...
+spec:
+  # type: NodePort
+  type: LoadBalancer
 ```
 
 ```bash
-kubectl apply -f ipaddresspool.yaml
+# calicoctl patch BGPConfig default --patch '{"spec": {"serviceLoadBalancerIPs": [{"cidr": "10.11.0.0/16"},{"cidr":"10.1.5.0/24"}]}}'
+# calicoctl patch BGPConfig default --patch '{"spec": {"serviceLoadBalancerIPs": [{"cidr": "192.168.0.0/16"}]}}'
+# calicoctl patch BGPConfig default --patch '{"spec": {"serviceLoadBalancerIPs": [{"cidr": "10.250.107.189/32"}]}}'
+
 ```

@@ -23,8 +23,8 @@ helm upgrade --install redis \
   --create-namespace \
   -f values-redis.yaml
 
-kubectl apply -f redis-pv-private.yaml && \
-kubectl apply -f redis-pvc-private.yaml && \
+# kubectl apply -f redis-pv-private.yaml && \
+# kubectl apply -f redis-pvc-private.yaml && \
 helm upgrade --install redis \
   ./redis \
   -n redis \
@@ -33,7 +33,7 @@ helm upgrade --install redis \
 ```
 
 ```bash
-
+helm uninstall -n redis redis
 ```
 
 ```bash

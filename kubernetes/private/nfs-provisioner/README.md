@@ -14,5 +14,7 @@ helm upgrade --install nfs-subdir-external-provisioner \
     -n corus \
     --create-namespace \
     -f values-nfs.yaml
-    
+
+
+helm uninstall -n corus nfs-subdir-external-provisioner 
 ```

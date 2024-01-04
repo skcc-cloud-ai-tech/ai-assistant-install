@@ -149,6 +149,10 @@ commonConfiguration: |-
   appendonly yes
   # Disable RDB persistence, AOF persistence already enabled.
   save ""
+
+  maxmemory 1024mb
+  maxmemory-policy allkeys-lru
+  # repl-backlog-size 10mb
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes
 ##
 existingConfigmap: ""
@@ -164,6 +168,9 @@ master:
   ## ref: https://redis.io/topics/config
   ##
   configuration: ""
+  # configuration: |-
+  #   maxmemory 1024mb
+  #   maxmemory-policy allkeys-lru
   ## @param master.disableCommands Array with Redis&reg; commands to disable on master nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
@@ -186,11 +193,11 @@ master:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   ##
-  # extraFlags: []
-  extraFlags:
-    - "--maxmemory 2048mb"
-    - "--maxmemory-policy volatile-lru"
-    # - "--repl-backlog-size 1024mb"
+  extraFlags: []
+  # # extraFlags:
+  #   - "--maxmemory 1024mb"
+  #   - "--maxmemory-policy allkeys-lru"
+  #   - "--repl-backlog-size 1024mb"
   ## @param master.extraEnvVars Array with extra environment variables to add to Redis&reg; master nodes
   ## e.g:
   ## extraEnvVars:
@@ -267,9 +274,13 @@ master:
   ## @param master.resources.requests The requested resources for the Redis&reg; master containers
   ##
   resources:
-    limits: {}
+    # limits: {}
     # requests: {}
+    limits:
+      cpu: 500m
+      memory: 3072Mi
     requests:
+      cpu: 500m
       memory: 3072Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -433,7 +444,8 @@ master:
     enabled: true
     ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
-    medium: ""
+    # medium: ""
+    medium: "Memory"
     ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
     ##
     sizeLimit: ""
@@ -480,7 +492,8 @@ master:
     ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires master.persistence.enabled: true
     ##
-    existingClaim: "redis-master"
+    # existingClaim: "redis-master"
+    existingClaim: ""
   ## Redis&reg; master service parameters
   ##
   service:
@@ -576,6 +589,10 @@ replica:
   ## ref: https://redis.io/topics/config
   ##
   configuration: ""
+  # configuration: |-
+  #   maxmemory 1024mb
+  #   maxmemory-policy allkeys-lru
+  #   # repl-backlog-size 10mb
   ## @param replica.disableCommands Array with Redis&reg; commands to disable on replicas nodes
   ## Commands will be completely disabled by renaming each to an empty string.
   ## ref: https://redis.io/topics/security#disabling-of-specific-commands
@@ -598,11 +615,11 @@ replica:
   ##  - "--maxmemory-policy volatile-ttl"
   ##  - "--repl-backlog-size 1024mb"
   ##
-  # extraFlags: []
-  extraFlags:
-    - "--maxmemory 1024mb"
-    - "--maxmemory-policy volatile-lru"
-    - "--repl-backlog-size 1024mb"
+  extraFlags: []
+  # extraFlags:
+  #   - "--maxmemory 1024mb"
+  #   - "--maxmemory-policy allkeys-lru"
+  #   - "--# repl-backlog-size 10mb"
   
   ## @param replica.extraEnvVars Array with extra environment variables to add to Redis&reg; replicas nodes
   ## e.g:
@@ -692,14 +709,18 @@ replica:
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
     # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
+    # limits: {}
     #   cpu: 250m
     #   memory: 256Mi
     # requests: {}
     # #   cpu: 250m
     # #   memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 3072Mi
     requests:
-      memory: 2048Mi
+      cpu: 500m
+      memory: 3072Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.podSecurityContext.enabled Enabled Redis&reg; replicas pods' Security Context
@@ -862,7 +883,8 @@ replica:
     enabled: true
     ## @param replica.persistence.medium Provide a medium for `emptyDir` volumes.
     ##
-    medium: ""
+    # medium: ""
+    medium: "Memory"
     ## @param replica.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
     ##
     sizeLimit: ""
@@ -909,7 +931,8 @@ replica:
     ## @param replica.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## NOTE: requires replica.persistence.enabled: true
     ##
-    existingClaim: "redis-replicas"
+    # existingClaim: "redis-replicas"
+    existingClaim: ""
   ## Redis&reg; replicas service parameters
   ##
   service:
@@ -1212,10 +1235,14 @@ sentinel:
   ## @param sentinel.resources.requests The requested resources for the Redis&reg; Sentinel containers
   ##
   resources:
-    limits: {}
+    # limits: {}
     # requests: {}
+    limits:
+      cpu: 500m
+      memory: 3072Mi
     requests:
-      memory: 1024Mi
+      cpu: 500m
+      memory: 3072Mi
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&reg; Sentinel containers' Security Context
