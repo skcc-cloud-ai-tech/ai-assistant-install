@@ -300,12 +300,12 @@ EOF
 az aks nodepool add \
     --no-wait \
     --cluster-name aks-corus-prd \
-    --name workerdata \
+    --name workerdata0 \
     --resource-group rg-corus \
     --mode User \
     --eviction-policy Delete \
     --tags creator="youngju_kim" profile="prd" project="ai-coding" \
-    --node-vm-size "Standard_D4ds_v5" \
+    --node-vm-size "Standard_E4ads_v5" \
     --labels nodetype=worker devicetype=cpu-data \
     --enable-cluster-autoscaler \
     --node-count 1 \
@@ -314,10 +314,8 @@ az aks nodepool add \
     --os-type Linux \
     --os-sku Ubuntu \
     --kubernetes-version "1.26.6" \
-    --max-pods 30 \
+    --max-pods 110 \
     --priority Regular \
-    --node-osdisk-size 256 \
-    --node-osdisk-type Managed \
     --linux-os-config linuxosconfig.json
     
     
