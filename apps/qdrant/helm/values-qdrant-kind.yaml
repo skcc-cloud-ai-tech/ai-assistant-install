@@ -118,11 +118,11 @@ topologySpreadConstraints: []
 
 persistence:
   accessModes: ["ReadWriteOnce"]
-  size: 10Gi
+  size: 100Gi
   annotations: {}
   # storageClassName: local-path
-  storageClassName: codev-nfs-storageclass
-  # storageClassName: manual
+  # storageClassName: codev-nfs-storageclass
+  storageClassName: manual
 
 # only supported for single node qdrant clusters.
 snapshotRestoration:

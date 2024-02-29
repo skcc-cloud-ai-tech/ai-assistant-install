@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: corus-file-storage-claim
-  namespace: corus
+  name: qdrant-storage
+  namespace: qdrant
 spec:
-  volumeName: corus-file-storage
+  volumeName: qdrant-storage
   storageClassName: manual
   accessModes:
     - ReadOnlyMany  # access mode 

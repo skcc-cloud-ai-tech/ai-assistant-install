@@ -10,12 +10,58 @@ nodes:
       kubeletExtraArgs:
         system-reserved: cpu=6,memory=12Gi
   extraPortMappings:
-  - containerPort: 30000
-    hostPort: 80
-    listenAddress: "127.0.0.1"
+  - hostPort: 80
+    containerPort: 30080
+    listenAddress: "0.0.0.0"
+    # listenAddress: "127.0.0.1"
+    protocol: TCP
+  - hostPort: 443
+    containerPort: 30443
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 5432
+    containerPort: 25432
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 9200
+    containerPort: 30920
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 6379
+    containerPort: 32637
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 6333
+    containerPort: 32660
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 6334
+    containerPort: 32661
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 19530
+    containerPort: 31953
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 18080
+    containerPort: 31880
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 18081
+    containerPort: 31881
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 19090
+    containerPort: 31990
+    listenAddress: "0.0.0.0"
+    protocol: TCP
+  - hostPort: 19091
+    containerPort: 31991
+    listenAddress: "0.0.0.0"
     protocol: TCP
   extraMounts:
     - hostPath: /private/tmp/volumes
+      # hostPath: /kind_data/kind_host_volume
       containerPath: /volumes
       # readOnly: true
     - hostPath: "$HOME/.ssl"

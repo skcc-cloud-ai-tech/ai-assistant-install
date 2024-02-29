@@ -42,14 +42,67 @@ service:
     port: 15021
     protocol: TCP
     targetPort: 15021
+    nodePort: 31521
   - name: http2
     port: 80
     protocol: TCP
     targetPort: 80
+    nodePort: 30080
   - name: https
     port: 443
     protocol: TCP
     targetPort: 443
+    nodePort: 30443
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+    nodePort: 25432
+  - name: opensearch
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+    nodePort: 30920
+  - name: redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+    nodePort: 32637
+  - name: qdrant-http
+    port: 6333
+    protocol: TCP
+    targetPort: 6333
+    nodePort: 32660
+  - name: qdrant-grpc
+    port: 6334
+    protocol: TCP
+    targetPort: 6334
+    nodePort: 32661
+  - name: milvus
+    port: 19530
+    protocol: TCP
+    targetPort: 19530
+    nodePort: 31953
+  - name: faiss
+    port: 18080
+    protocol: TCP
+    targetPort: 18080
+    nodePort: 31880
+  - name: reserved
+    port: 18081
+    protocol: TCP
+    targetPort: 18081
+    nodePort: 31881
+  - name: faiss
+    port: 19090
+    protocol: TCP
+    targetPort: 19090
+    nodePort: 31990
+  - name: faiss
+    port: 19091
+    protocol: TCP
+    targetPort: 19091
+    nodePort: 31991
   annotations: {}
   loadBalancerIP: ""
   loadBalancerSourceRanges: []

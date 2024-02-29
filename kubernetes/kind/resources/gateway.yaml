@@ -10,7 +10,6 @@ spec:
   servers:
   - hosts:
     - '*'
-    - app.stg.corus-ai.net
     port:
       number: 80
       name: http

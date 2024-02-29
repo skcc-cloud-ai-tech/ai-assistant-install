@@ -30,7 +30,43 @@ spec:
     - '*'
     port:
       number: 6333
-      name: qdrant
+      name: qdrant-http
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 6334
+      name: qdrant-grpc
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 19530
+      name: milvus
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 18080
+      name: faiss
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 18081
+      name: reserved
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 19090
+      name: reserved
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 19091
+      name: reserved
       protocol: TCP
 ---
 apiVersion: networking.istio.io/v1beta1
@@ -76,3 +112,51 @@ spec:
         port:
           number: 6333
         host: qdrant.qdrant.svc.cluster.local
+  - match:
+    - port: 6334
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 6334
+        host: qdrant.qdrant.svc.cluster.local
+  - match:
+    - port: 19530
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 19530
+        host: milvus.milvus.svc.cluster.local
+  - match:
+    - port: 18080
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 18080
+        host: faiss.faiss.svc.cluster.local
+  - match:
+    - port: 18081
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 18081
+        host: reserved.reserved.svc.cluster.local
+  - match:
+    - port: 19090
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 19090
+        host: reserved.reserved.svc.cluster.local
+  - match:
+    - port: 19091
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 19091
+        host: reserved.reserved.svc.cluster.local

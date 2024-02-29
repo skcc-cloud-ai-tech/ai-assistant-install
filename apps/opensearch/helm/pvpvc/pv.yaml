@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: corus-file-storage
+  name: opensearch-cluster-master
 spec:
   capacity:
-    storage: 10Gi
+    storage: 300Gi
   accessModes:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: /volume
+    path: /volume/opensearch
     # path: "/data/kind_host_volume"

@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: corus-file-storage-claim
-  namespace: corus
+  name: opensearch-cluster-master
+  namespace: opensearch
 spec:
-  volumeName: corus-file-storage
+  volumeName: opensearch-cluster-master
   storageClassName: manual
   accessModes:
     - ReadOnlyMany  # access mode 
   resources:
     requests:
-      storage: 100Gi
+      storage: 300Gi

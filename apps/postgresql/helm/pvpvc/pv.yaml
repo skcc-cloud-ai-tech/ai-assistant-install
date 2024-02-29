@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: corus-file-storage
+  name: postgresql
 spec:
   capacity:
-    storage: 10Gi
+    storage: 100Gi
   accessModes:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: /volume
+    path: /volume/postgresql
     # path: "/data/kind_host_volume"
