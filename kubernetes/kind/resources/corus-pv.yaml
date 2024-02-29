@@ -9,5 +9,10 @@ spec:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
+<<<<<<< Updated upstream
     path: /volume
     # path: "/data/kind_host_volume"
+=======
+    #path: "/data/kind_host_volume"
+    path: "/volume"
+>>>>>>> Stashed changes
