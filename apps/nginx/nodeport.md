@@ -29,6 +29,15 @@ server {
 
 ```bash
 sudo systemctl enable nginx
+sudo systemctl daemon-reload
 sudo systemctl start nginx
 sudo systemctl status nginx
+```
+
+```bash
+
+# sudo iptables -t nat -A PREROUTING -p tcp --dport 5432 -j REDIRECT --to-port 32543
+
+sudo iptables -t nat -A PREROUTING -p tcp --dport 5432 -j DOCKER
+sudo iptables -t nat -A DOCKER -p tcp --dport 5432 -j DNAT --to 172.18.0.2:32543
 ```
