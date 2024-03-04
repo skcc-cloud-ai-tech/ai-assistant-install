@@ -1,0 +1,162 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: istio-tcp-gateway
+  namespace: istio-system
+spec:
+  selector:
+    # app: istio-gateway
+    istio: gateway
+  servers:
+  - hosts:
+    - '*'
+    port:
+      number: 5432
+      name: postgresql
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 9200
+      name: opensearch
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      name: redis
+      number: 6379
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 6333
+      name: qdrant-http
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 6334
+      name: qdrant-grpc
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 19530
+      name: milvus
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 18080
+      name: faiss
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 18081
+      name: reserved0
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 19090
+      name: reserved1
+      protocol: TCP
+  - hosts:
+    - '*'
+    port:
+      number: 19091
+      name: reserved2
+      protocol: TCP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vs-tcp
+  namespace: istio-system
+spec:
+  hosts:
+  - '*'
+  gateways:
+  - istio-system/istio-tcp-gateway
+  # - mesh # applies to all the sidecars in the mesh
+  tcp:
+  - match:
+    - port: 5432
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 5432
+        host: postgresql-postgresql-ha-pgpool.postgresql.svc.cluster.local
+  - match:
+    - port: 9200
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 9200
+        host: opensearch-cluster-master.opensearch.svc.cluster.local
+  - match:
+    - port: 6379
+    route:
+    - destination:
+        host: redis-master.redis.svc.cluster.local
+        port:
+          number: 6379
+  - match:
+    - port: 6333
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 6333
+        host: qdrant.qdrant.svc.cluster.local
+  - match:
+    - port: 6334
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 6334
+        host: qdrant.qdrant.svc.cluster.local
+  - match:
+    - port: 19530
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 19530
+        host: milvus.milvus.svc.cluster.local
+  - match:
+    - port: 18080
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 18080
+        host: faiss.faiss.svc.cluster.local
+  - match:
+    - port: 18081
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 18081
+        host: reserved0.reserved.svc.cluster.local
+  - match:
+    - port: 19090
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 19090
+        host: reserved1.reserved.svc.cluster.local
+  - match:
+    - port: 19091
+    route:
+  # - route:
+    - destination:
+        port:
+          number: 19091
+        host: reserved2.reserved.svc.cluster.local

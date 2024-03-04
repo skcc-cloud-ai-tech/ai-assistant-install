@@ -9,5 +9,5 @@ spec:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: /volume/qdrant
+    path: /var/tmp/kind_volume/qdrant
     # path: "/data/kind_host_volume"

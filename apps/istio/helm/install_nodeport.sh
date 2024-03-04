@@ -1,3 +1,6 @@
+#!/bin/bash
+
+kubectl create namespace istio-system
 
 helm upgrade --install istio-base \
     ./base \

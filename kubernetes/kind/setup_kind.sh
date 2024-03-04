@@ -29,11 +29,11 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scrip
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 
-mkdir -p /tmp/volumes
+# mkdir -p /tmp/volumes
 
-HOST_VOLUME=/kind_data/kind_host_volume
-sudo mkdir -p $HOST_VOLUME
-sudo chmod -R 777 /kind_data
+HOST_VOLUME=/var/tmp/kind_host_volume
+mkdir -p $HOST_VOLUME
+# sudo chmod -R 777 /kind_data
 
 kind create cluster \
   --name local \
@@ -47,7 +47,9 @@ nodes:
     kind: InitConfiguration
     nodeRegistration:
       kubeletExtraArgs:
-        system-reserved: cpu=${CPU_NUM},memory=${MEM_NUM}Gi
+        # system-reserved =  OS system daemons like sshd, udev, etc.
+        # system-reserved: cpu=4,memory=8 
+        # system-reserved: cpu=${CPU_NUM},memory=${MEM_NUM}Gi
   extraPortMappings:
   - hostPort: 8080
     containerPort: 30080
@@ -59,7 +61,7 @@ nodes:
     listenAddress: "0.0.0.0"
     protocol: TCP
   - hostPort: 5432
-    containerPort: 25432
+    containerPort: 32543
     listenAddress: "0.0.0.0"
     protocol: TCP
   - hostPort: 9200
@@ -100,30 +102,31 @@ nodes:
     protocol: TCP
   extraMounts:
     - hostPath: $HOST_VOLUME
-      containerPath: /volume
+      containerPath: /var/tmp/kind_volume
     # - hostPath: "$HOME/.ssl/SK_SSL.crt"
     #   containerPath: /usr/local/share/ca-certificates/SK_SSL.crt
 # - role: worker
 EOF
 
 docker update --cpus=${CPU_NUM} -m ${MEM_NUM}g --memory-swap -1 local-control-plane
-kubectl label --overwrite nodes `kubectl get no -o jsonpath='{.items[0].metadata.name}'` nodetype=worker devicetype=cpu
+kubectl label --overwrite nodes `kubectl get no -o jsonpath='{.items[0].metadata.name}'` \
+  nodetype=worker \
+  devicetype=cpu
+  # node-role.kubernetes.io/control-plane=
 
 
 kubectl config current-context  # kind-local
 
-# Install Istio
-helm repo add istio https://istio-release.storage.googleapis.com/charts
-helm repo update
-
-kubectl create namespace istio-system
 
 cd `pwd`/../..
 REPO_ROOT=`pwd`
 APPS_ROOT=$REPO_ROOT/apps
 
+HOST_VOLUME=/var/tmp/kind_host_volume
+
 cd $APPS_ROOT/istio/helm && ./install_nodeport.sh
 cd $APPS_ROOT/istio/tracing && ./install.sh
+
 cd $APPS_ROOT/postgresql/helm && ./install_kind.sh
 cd $APPS_ROOT/redis/helm && ./install_kind.sh
 cd $APPS_ROOT/opensearch/helm && ./install_kind.sh
@@ -147,6 +150,7 @@ cd $APPS_ROOT/qdrant/helm && ./install_kind.sh
 #     -f istio-values-kind.yaml \
 #     --wait
 
+cd $REPO_ROOT/kubernetes/kind
 
 
 DB_USERNAME="corus"
@@ -212,8 +216,8 @@ kubectl apply -f resources/systemdb-service.yaml
 kubectl apply -f resources/gateway.yaml
 # kubectl apply -f llm-api-key-secret-example.yaml
 
-kubectl apply -f resources/corus-pv.yaml
-kubectl apply -f resources/corus-pvc.yaml
+kubectl apply -f resources/pvpvc/corus-pv.yaml
+kubectl apply -f resources/pvpvc/corus-pvc.yaml
 
 # =========================================================
 
@@ -227,3 +231,7 @@ kubectl apply -f resources/corus-pvc.yaml
 # kubectl apply -f local/frontend
 
 # kubectl apply -f dev/backend/virtualservice.yaml
+
+# git clone https://<key>@github.com/skcc-cloud-ai-tech/ai-assistant-backend
+# cd ai-assistant-backend
+cd ~/git/ai-assistant-backend

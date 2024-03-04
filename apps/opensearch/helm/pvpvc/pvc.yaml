@@ -1,13 +1,27 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: opensearch-cluster-master
+  name: opensearch-cluster-master-opensearch-cluster-master-0
   namespace: opensearch
 spec:
-  volumeName: opensearch-cluster-master
+  volumeName: opensearch-cluster-master-opensearch-cluster-master-0
   storageClassName: manual
   accessModes:
-    - ReadOnlyMany  # access mode 
+    - ReadWriteOnce  # access mode 
+  resources:
+    requests:
+      storage: 300Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: opensearch-cluster-master-opensearch-cluster-master-1
+  namespace: opensearch
+spec:
+  volumeName: opensearch-cluster-master-opensearch-cluster-master-1
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce  # access mode 
   resources:
     requests:
       storage: 300Gi

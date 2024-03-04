@@ -9,7 +9,7 @@ spec:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: /volume/redis-master
+    path: /var/tmp/kind_volume/redis-master
     # path: "/data/kind_host_volume"
 # ---
 # apiVersion: v1
@@ -23,5 +23,5 @@ spec:
 #     - ReadOnlyMany
 #   storageClassName: manual
 #   hostPath:
-#     path: /volume/redis-replicas
+#     path: /var/tmp/kind_volume/redis-replicas
 #     # path: "/data/kind_host_volume"

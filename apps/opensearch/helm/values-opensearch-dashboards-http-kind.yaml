@@ -255,7 +255,8 @@ nodeSelector:
   kubernetes.io/os: linux
   nodetype: worker
   # spot: "false"
-  devicetype: "cpu-data"
+  # devicetype: "cpu-data"
+  devicetype: "cpu"
 
 tolerations: []
 

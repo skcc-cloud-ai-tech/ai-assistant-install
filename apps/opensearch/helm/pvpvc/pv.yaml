@@ -1,13 +1,27 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: opensearch-cluster-master
+  name: opensearch-cluster-master-opensearch-cluster-master-0
 spec:
   capacity:
     storage: 300Gi
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   storageClassName: manual
   hostPath:
-    path: /volume/opensearch
+    path: /var/tmp/kind_volume/opensearch-cluster-master-0
+    # path: "/data/kind_host_volume"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: opensearch-cluster-master-opensearch-cluster-master-1
+spec:
+  capacity:
+    storage: 300Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  hostPath:
+    path: /var/tmp/kind_volume/opensearch-cluster-master-opensearch-cluster-master-1
     # path: "/data/kind_host_volume"

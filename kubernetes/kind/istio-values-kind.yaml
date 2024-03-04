@@ -52,17 +52,17 @@ service:
     protocol: TCP
     targetPort: 18080
     nodePort: 31880
-  - name: reserved
+  - name: reserved0
     port: 18081
     protocol: TCP
     targetPort: 18081
     nodePort: 31881
-  - name: faiss
+  - name: reserved1
     port: 19090
     protocol: TCP
     targetPort: 19090
     nodePort: 31990
-  - name: faiss
+  - name: reserved2
     port: 19091
     protocol: TCP
     targetPort: 19091

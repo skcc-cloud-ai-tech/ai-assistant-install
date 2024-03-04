@@ -9,5 +9,5 @@ spec:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: /volume/postgresql
+    path: /var/tmp/kind_volume/postgresql
     # path: "/data/kind_host_volume"

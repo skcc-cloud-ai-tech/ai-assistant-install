@@ -19,7 +19,7 @@ roles:
   - data
   - remote_cluster_client
 
-replicas: 3
+replicas: 2 # 3
 
 # if not set, falls back to parsing .Values.imageTag, then .Chart.appVersion.
 majorVersion: ""
@@ -341,15 +341,17 @@ persistence:
   #   set, choosing the default provisioner.  (gp2 on AWS, standard on
   #   GKE, AWS & OpenStack)
   #
-  storageClass: "-"
+  # storageClass: "-"
+  storageClass: "manual"
   # storageClass: "azureblob-fuse-premium"
   # storageClass: "opensearch-azureblob-nfs-premium"
   # storageClass: "opensearch-azureblob-fuse-premium"
   # storageClass: "opensearch-azurefile-csi-premium"
   # storageClass: "opensearch-azurefile-premium"
   accessModes:
+    # - ReadWriteOnce
     - ReadWriteOnce
-  size: 2Ti  # 8Gi
+  size: 300Gi  # 2Ti  # 8Gi
   annotations: {}
 
 # extraVolumes: []
@@ -485,9 +487,10 @@ updateStrategy: RollingUpdate
 maxUnavailable: 1
 
 podSecurityContext:
-  fsGroup: 1000
-  runAsUser: 1000
-  runAsGroup: 1000
+  fsGroup: 0
+  # fsGroup: 1000
+  # runAsUser: 1000
+  # runAsGroup: 1000
 
 securityContext:
   capabilities:
@@ -628,7 +631,8 @@ imagePullSecrets: []
 nodeSelector:
   kubernetes.io/os: linux
   nodetype: worker
-  devicetype: "cpu-data"
+  devicetype: cpu
+  # devicetype: "cpu-data"
   # spot: "false"
 tolerations: []
 

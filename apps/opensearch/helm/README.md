@@ -8,7 +8,9 @@ See: https://github.com/opensearch-project/helm-charts
 for each nodes:
 
 ```bash
-sudo bash -c 'echo "vm.max_map_count = 262144" >> /etc/sysctl.conf' && sudo sysctl -p
+# sudo bash -c 'echo "vm.max_map_count = 262144" >> /etc/sysctl.conf' && sudo sysctl -p
+
+echo 'vm.max_map_count = 262144' >> /etc/sysctl.d/opensearch.conf && sysctl --system
 ```
 
 PV/PVC

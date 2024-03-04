@@ -4,7 +4,7 @@ metadata:
   name: corus-file-storage
 spec:
   capacity:
-    storage: 10Gi
+    storage: 100Gi
   accessModes:
     - ReadOnlyMany
   storageClassName: manual

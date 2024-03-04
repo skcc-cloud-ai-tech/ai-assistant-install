@@ -225,9 +225,15 @@ spec:
             secretName: {{ include "qdrant.fullname" . }}-apikey
             defaultMode: 0600
         {{- end }}
+        {{- if .Values.persistence.existingClaim }}
+        - name: qdrant-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim }}
+        {{- end }}
         {{- if .Values.additionalVolumes }}
 {{- toYaml .Values.additionalVolumes | default "" | nindent 8 }}
         {{- end}}
+  {{- if not .Values.persistence.existingClaim }}
   volumeClaimTemplates:
     - metadata:
         name: qdrant-storage
@@ -246,3 +252,4 @@ spec:
         resources:
           requests:
             storage: {{ .Values.persistence.size | quote }}
+  {{- end }}

@@ -1,0 +1,12 @@
+Release "fluent-bit" does not exist. Installing it now.
+NAME: fluent-bit
+LAST DEPLOYED: Mon Mar  4 02:39:10 2024
+NAMESPACE: logging
+STATUS: deployed
+REVISION: 1
+NOTES:
+Get Fluent Bit build information by running these commands:
+
+export POD_NAME=$(kubectl get pods --namespace logging -l "app.kubernetes.io/name=fluent-bit,app.kubernetes.io/instance=fluent-bit" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace logging port-forward $POD_NAME 2020:2020
+curl http://127.0.0.1:2020
