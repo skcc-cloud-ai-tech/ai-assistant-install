@@ -5,6 +5,8 @@
 
 OPENSEARCH_USERNAME="admin"
 OPENSEARCH_PASSWORD="admin"
+
+kubectl create ns logging
 kubectl create secret generic opensearch-cred \
   -n logging \
   --from-literal=username="$OPENSEARCH_USERNAME" \

@@ -1,6 +1,6 @@
 Release "fluent-bit" does not exist. Installing it now.
 NAME: fluent-bit
-LAST DEPLOYED: Mon Mar  4 02:39:10 2024
+LAST DEPLOYED: Mon Mar  4 06:20:28 2024
 NAMESPACE: logging
 STATUS: deployed
 REVISION: 1

@@ -9,5 +9,5 @@ spec:
     - ReadOnlyMany
   storageClassName: manual
   hostPath:
-    path: /volume
-    # path: "/data/kind_host_volume"
+    # path: /volume
+    path: /var/tmp/kind_volume/corus-file-storage

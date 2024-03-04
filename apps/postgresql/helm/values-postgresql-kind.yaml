@@ -572,9 +572,13 @@ postgresql:
   ##      #!/bin/sh
   ##      echo "Do something."
   ##
-  initdbScripts: {}
+  # initdbScripts: {}
   ## @param postgresql.initdbScriptsCM ConfigMap with scripts to be run at first boot
   ## NOTE: This will override initdbScripts
+  initdbScripts:
+    create.sh: |
+      #!/bin/sh
+      psql -c "CREATE USER corus WITH PASSWORD 'Quickdraw!' CREATEDB CREATEROLE; CREATEDB -h 0.0.0.0 -p 5432 -E UTF8 -O corus corus_backend;"
   ##
   initdbScriptsCM: ""
   ## @param postgresql.initdbScriptsSecret Secret with scripts to be run at first boot

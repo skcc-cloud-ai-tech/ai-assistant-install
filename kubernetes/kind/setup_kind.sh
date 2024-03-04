@@ -175,7 +175,7 @@ kubectl create ns corus
 #   --set global.redis.password=$REDIS_PASSWORD \
 #   --set replica.replicaCount=0
 
-kubectl create secret docker-registry acr-cred \
+kubectl create secret docker-registry az-ecr-cred \
     --namespace corus \
     --docker-server="codevai.azurecr.io" \
     --docker-username="codevai" \
@@ -214,10 +214,20 @@ kubectl apply -f resources/serviceaccount.yaml
 kubectl apply -f resources/systemdb-service.yaml
 # kubectl apply -f resources/es-service.yaml
 kubectl apply -f resources/gateway.yaml
+kubectl apply -f resources/tcp-virtualservice.yaml
 # kubectl apply -f llm-api-key-secret-example.yaml
 
+sed -E -e "s|ReadOnlyMany|ReadWriteMany|g" resources/pvpvc/corus-pv.yaml | kubectl apply -f - && \
+sed -E -e "s|ReadOnlyMany|ReadWriteMany|g" resources/pvpvc/corus-pvc.yaml | kubectl apply -f - && \
+kubectl apply -f resources/pvpvc/mkdir-job.yaml && \
+  kubectl -n corus wait --for=condition=complete job/mkdir && \
+  kubectl delete -f resources/pvpvc/mkdir-job.yaml && \
+  kubectl delete -f resources/pvpvc/corus-pvc.yaml && \
+  kubectl delete -f resources/pvpvc/corus-pv.yaml
+  
 kubectl apply -f resources/pvpvc/corus-pv.yaml
 kubectl apply -f resources/pvpvc/corus-pvc.yaml
+
 
 # =========================================================
 
@@ -234,4 +244,4 @@ kubectl apply -f resources/pvpvc/corus-pvc.yaml
 
 # git clone https://<key>@github.com/skcc-cloud-ai-tech/ai-assistant-backend
 # cd ai-assistant-backend
-cd ~/git/ai-assistant-backend
+# cd ~/git/ai-assistant-backend

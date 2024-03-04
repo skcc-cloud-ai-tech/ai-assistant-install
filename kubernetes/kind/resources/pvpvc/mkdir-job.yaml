@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mkdir
+  namespace: corus
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: mkdir
+        image: busybox
+        command: 
+        - sh
+        - -c
+        - 'mkdir -p /tmp/data/tmp && rm -rf /tmp/data/tmp'
+        volumeMounts:
+        - mountPath: "/tmp/data"
+          name: pvc
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+      volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: corus-file-storage-claim

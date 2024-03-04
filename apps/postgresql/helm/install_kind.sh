@@ -10,10 +10,13 @@ kubectl apply -f pvpvc/pvc.yaml
 # sudo chown -R nobody:nogroup $HOST_VOLUME/postgresql
 
 kubectl create ns corus
+DB_USERNAME=corus
+DB_PASSWORD=Quickdraw!
 kubectl create secret generic systemdb-cred \
   -n corus \
   --from-literal=username="$DB_USERNAME" \
   --from-literal=password="$DB_PASSWORD"
+
 
 helm upgrade --install postgresql \
   ./postgresql-ha \
