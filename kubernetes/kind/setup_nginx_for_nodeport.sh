@@ -4,7 +4,7 @@
 
 apt update && apt install nginx -y
 
-NGINX_CONF=/etc/nginx/conf.d/http-nodeport.conf
+NGINX_CONF=/etc/nginx/sites-available/nodeport
 cat << 'EOF' > $NGINX_CONF  # 'EOF': prevent expanding envvar
 # http
 server {
@@ -13,12 +13,15 @@ server {
     server_name example.com;
 
     location / {
-      proxy_pass http://localhost:8080/;
-      proxy_http_version 1.1;
-      proxy_set_header Host $http_host;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection upgrade;
-      proxy_set_header Accept-Encoding gzip;
+        proxy_pass http://localhost:8080/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection upgrade;
+        proxy_pass_request_headers on;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Accept-Encoding gzip;
     }
 }
 # https
@@ -28,44 +31,17 @@ server {
     server_name example.com;
 
     location / {
-      proxy_pass http://localhost:8443/;
-      proxy_http_version 1.1;
-      proxy_set_header Host $http_host;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection upgrade;
-      proxy_set_header Accept-Encoding gzip;
+        proxy_pass http://localhost:8443/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection upgrade;
+        proxy_pass_request_headers on;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Accept-Encoding gzip;
     }
 }
-# # http
-# server {
-#     listen 30080;
-#     listen [::]:30080;
-#     server_name example.com;
-
-#     location / {
-#       proxy_pass http://localhost:8080/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
-#     }
-# }
-# # https
-# server {
-#     listen 8443;
-#     listen [::]:8443;
-#     server_name example.com;
-
-#     location / {
-#       proxy_pass http://localhost:30443/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
-#     }
-# }
 # # postgresql
 # server {
 #     listen 5432;
@@ -73,12 +49,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:32543/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:32543/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # opensearch
@@ -88,12 +67,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:30920/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:30920/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # redis
@@ -103,12 +85,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:32637/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:32637/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # qdrant-http
@@ -118,12 +103,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:32660/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:32660/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # qdrant-grpc
@@ -133,12 +121,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:32661/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:32661/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # milvus
@@ -148,12 +139,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:31953/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:31953/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # faiss
@@ -163,12 +157,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:31880/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:31880/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # reserved
@@ -178,12 +175,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:31881/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:31881/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # reserved
@@ -193,12 +193,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:31990/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:31990/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 # # reserved
@@ -208,12 +211,15 @@ server {
 #     server_name example.com;
 
 #     location / {
-#       proxy_pass http://localhost:31991/;
-#       proxy_http_version 1.1;
-#       proxy_set_header Host $http_host;
-#       proxy_set_header Upgrade $http_upgrade;
-#       proxy_set_header Connection upgrade;
-#       proxy_set_header Accept-Encoding gzip;
+#         proxy_pass http://localhost:31991/;
+#         proxy_http_version 1.1;
+#         proxy_set_header Host $http_host;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection upgrade;
+#         proxy_pass_request_headers on;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header Accept-Encoding gzip;
 #     }
 # }
 EOF
@@ -223,8 +229,9 @@ DOMAIN=${1:-example.com}
 sed -i \
   -e "s|server_name .*|server_name ${DOMAIN};|g" \
   $NGINX_CONF
+ln -s $NGINX_CONF /etc/nginx/sites-enabled/
 
 systemctl enable nginx
 systemctl daemon-reload
-systemctl start nginx
+systemctl restart nginx
 # systemctl status nginx

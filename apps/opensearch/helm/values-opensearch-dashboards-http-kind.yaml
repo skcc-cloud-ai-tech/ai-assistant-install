@@ -116,13 +116,18 @@ config:
         name: dashboards
         host: "{{ .Values.serverHost }}"
         basePath: "/monitoring/logs"
-        rewriteBasePath: false
+        rewriteBasePath: true # false
         maxPayloadBytes: 1048576
         ssl:
           enabled: false
       opensearch:
+        hosts:
+        - "http://opensearch-cluster-master:9200"
         username: "admin"
         password: "admin"
+        requestHeadersWhitelist:
+        - "securitytenant"
+        - "authorization"
         ssl:
           verificationMode: none # full
           # key: /usr/share/opensearch-dashboards/certs/esnode-key.pem
@@ -136,7 +141,24 @@ config:
         memoryCircuitBreaker:
           enabled: false
           maxPercentage: 1.0
-      
+
+      opensearch_security:
+        auth:
+          multiple_auth_enabled: true
+          type:
+          - "basicauth"
+        multitenancy:
+          enabled: true
+          tenants:
+            preferred:
+            - "Private"
+            - "Global"
+        readonly_mode:
+          roles:
+          - "kibana_read_only"
+        cookie:
+          secure: false  # Use this setting if you are running opensearch-dashboards without https
+
       logging:
         dest: stdout
         silent: false
@@ -183,7 +205,11 @@ opensearchAccount:
   keyPassphrase:
     enabled: false
 
-labels: {}
+# labels: {}
+labels:
+  app: opensearch-dashboards
+  app/group: corus
+  app/profile: default
 
 hostAliases: []
 # - ip: "127.0.0.1"
@@ -205,7 +231,11 @@ service:
   port: 5601
   loadBalancerIP: ""
   nodePort: ""
-  labels: {}
+  # labels: {}
+  labels:
+    app: opensearch-dashboards
+    app/group: corus
+    app/profile: default
   annotations: {}
   loadBalancerSourceRanges: []
   # 0.0.0.0/0
