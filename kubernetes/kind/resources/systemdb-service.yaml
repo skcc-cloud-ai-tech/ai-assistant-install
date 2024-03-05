@@ -16,3 +16,22 @@ spec:
     targetPort: 5432
   sessionAffinity: None
   type: ExternalName
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+    app/group: corus
+    app/profile: default
+  name: redis
+  namespace: corus
+spec:
+  # externalName: systemdb-postgresql.corus.svc.cluster.local
+  externalName: redis-master.redis.svc.cluster.local
+  ports:
+  - port: 6379
+    protocol: TCP
+    targetPort: 6379
+  sessionAffinity: None
+  type: ExternalName

@@ -12,17 +12,24 @@ server {
     listen [::]:80;
     server_name example.com;
     client_max_body_size 0;
+    proxy_request_buffering off;
 
     location / {
         proxy_pass http://localhost:8080/;
         proxy_http_version 1.1;
         proxy_set_header Host $http_host;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection upgrade;
+        # proxy_set_header Upgrade $http_upgrade;
+        # proxy_set_header Connection upgrade;
         proxy_pass_request_headers on;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Accept-Encoding gzip;
+        # client_max_body_size 0;
+        # proxy_set_header X-Real-IP $remote_addr;
+        # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # proxy_set_header Accept-Encoding gzip, deflate;
+        # proxy_read_timeout 1800;
+        # proxy_connect_timeout 1800;
+        # proxy_send_timeout 1800;
+        # send_timeout 1800;
+        # proxy_request_buffering off;
     }
 }
 # https
@@ -30,7 +37,6 @@ server {
     listen 443;
     listen [::]:443;
     server_name example.com;
-    client_max_body_size 0;
 
     location / {
         proxy_pass http://localhost:8443/;
