@@ -11,6 +11,7 @@ server {
     listen 80;
     listen [::]:80;
     server_name example.com;
+    client_max_body_size 0;
 
     location / {
         proxy_pass http://localhost:8080/;
@@ -29,6 +30,7 @@ server {
     listen 443;
     listen [::]:443;
     server_name example.com;
+    client_max_body_size 0;
 
     location / {
         proxy_pass http://localhost:8443/;
@@ -47,6 +49,7 @@ server {
 #     listen 5432;
 #     listen [::]:5432;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:32543/;
@@ -65,6 +68,7 @@ server {
 #     listen 9200;
 #     listen [::]:9200;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:30920/;
@@ -83,6 +87,7 @@ server {
 #     listen 6379;
 #     listen [::]:6379;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:32637/;
@@ -101,6 +106,7 @@ server {
 #     listen 6333;
 #     listen [::]:6333;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:32660/;
@@ -119,6 +125,7 @@ server {
 #     listen 6334;
 #     listen [::]:6334;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:32661/;
@@ -137,6 +144,7 @@ server {
 #     listen 19530;
 #     listen [::]:19530;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:31953/;
@@ -155,6 +163,7 @@ server {
 #     listen 18080;
 #     listen [::]:18080;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:31880/;
@@ -173,6 +182,7 @@ server {
 #     listen 18081;
 #     listen [::]:18081;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:31881/;
@@ -191,6 +201,7 @@ server {
 #     listen 19090;
 #     listen [::]:19090;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:31990/;
@@ -209,6 +220,7 @@ server {
 #     listen 19091;
 #     listen [::]:19091;
 #     server_name example.com;
+#     client_max_body_size 0;
 
 #     location / {
 #         proxy_pass http://localhost:31991/;
